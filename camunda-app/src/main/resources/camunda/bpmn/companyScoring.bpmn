@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" id="Definitions_0vs41if" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.3">
+  <bpmn:collaboration id="Collaboration_08rljvx">
+    <bpmn:participant id="CompanyScoring" name="Company scoring" processRef="CompanyScoringProcess" />
+    <bpmn:participant id="Participant_0qamp85" name="External service" />
+    <bpmn:participant id="Participant_1ubnu4a" name="Application storage" />
+    <bpmn:messageFlow id="Flow_0v5dn3z" name="REST API" sourceRef="Participant_0qamp85" targetRef="StartEvent" />
+    <bpmn:messageFlow id="Flow_1pfg5qx" name="REST API" sourceRef="GetApplicationDataTask" targetRef="Participant_1ubnu4a" />
+    <bpmn:messageFlow id="Flow_0g92mxl" name="Kafka" sourceRef="SendResponseTask" targetRef="Participant_0qamp85" />
+  </bpmn:collaboration>
+  <bpmn:process id="CompanyScoringProcess" isExecutable="true">
+    <bpmn:serviceTask id="GetApplicationDataTask" name="Get application data" camunda:asyncBefore="true" camunda:delegateExpression="${getApplicationDataDelegate}">
+      <bpmn:incoming>Flow_1g0313m</bpmn:incoming>
+      <bpmn:outgoing>Flow_08i2hn9</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="SelectStrategiesTask" name="Select strategies" camunda:asyncBefore="true" camunda:delegateExpression="${selectStrategiesDelegate}">
+      <bpmn:incoming>Flow_08i2hn9</bpmn:incoming>
+      <bpmn:outgoing>Flow_0x5ug3w</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:callActivity id="ScoringByStrategyTask" name="Scoring by strategy" camunda:asyncBefore="true" calledElement="ScoringByStrategyProcess">
+      <bpmn:extensionElements>
+        <camunda:in businessKey="#{execution.processBusinessKey}" />
+        <camunda:in source="clientId" target="clientId" />
+        <camunda:in source="strategy" target="strategy" />
+        <camunda:out source="strategy" target="strategy" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0x5ug3w</bpmn:incoming>
+      <bpmn:outgoing>Flow_1x8t79n</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${strategies}" camunda:elementVariable="strategy" />
+    </bpmn:callActivity>
+    <bpmn:sendTask id="SendResponseTask" name="Send response" camunda:asyncBefore="true" camunda:delegateExpression="${sendResponseDelegate}">
+      <bpmn:incoming>Flow_0x3bnz3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1548w1h</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:businessRuleTask id="DetermineResultTask" name="Determine result" camunda:asyncBefore="true" camunda:decisionRef="determineResult">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="result" />
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1x8t79n</bpmn:incoming>
+      <bpmn:outgoing>Flow_0x3bnz3</bpmn:outgoing>
+    </bpmn:businessRuleTask>
+    <bpmn:startEvent id="StartEvent">
+      <bpmn:outgoing>Flow_1g0313m</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1g0313m" sourceRef="StartEvent" targetRef="GetApplicationDataTask" />
+    <bpmn:sequenceFlow id="Flow_08i2hn9" sourceRef="GetApplicationDataTask" targetRef="SelectStrategiesTask" />
+    <bpmn:sequenceFlow id="Flow_0x5ug3w" sourceRef="SelectStrategiesTask" targetRef="ScoringByStrategyTask" />
+    <bpmn:sequenceFlow id="Flow_1x8t79n" sourceRef="ScoringByStrategyTask" targetRef="DetermineResultTask" />
+    <bpmn:sequenceFlow id="Flow_1548w1h" sourceRef="SendResponseTask" targetRef="EndEvent" />
+    <bpmn:sequenceFlow id="Flow_0x3bnz3" sourceRef="DetermineResultTask" targetRef="SendResponseTask" />
+    <bpmn:endEvent id="EndEvent">
+      <bpmn:incoming>Flow_1548w1h</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:textAnnotation id="TextAnnotation_0s7wf09">
+      <bpmn:text>Input:
+- applicationId: String
+</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0z1ju7u" sourceRef="StartEvent" targetRef="TextAnnotation_0s7wf09" />
+    <bpmn:textAnnotation id="TextAnnotation_0nhxuzu">
+      <bpmn:text>Response:
+- applicationId: String
+- scoringResult: String</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0afyqu1" sourceRef="SendResponseTask" targetRef="TextAnnotation_0nhxuzu" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_08rljvx">
+      <bpmndi:BPMNShape id="Participant_1ayfyka_di" bpmnElement="CompanyScoring" isHorizontal="true">
+        <dc:Bounds x="180" y="190" width="930" height="260" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0nhxuzu_di" bpmnElement="TextAnnotation_0nhxuzu">
+        <dc:Bounds x="940" y="208" width="140" height="53" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0x3bnz3_di" bpmnElement="Flow_0x3bnz3">
+        <di:waypoint x="860" y="350" />
+        <di:waypoint x="910" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1548w1h_di" bpmnElement="Flow_1548w1h">
+        <di:waypoint x="1010" y="350" />
+        <di:waypoint x="1052" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1x8t79n_di" bpmnElement="Flow_1x8t79n">
+        <di:waypoint x="710" y="350" />
+        <di:waypoint x="760" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0x5ug3w_di" bpmnElement="Flow_0x5ug3w">
+        <di:waypoint x="560" y="350" />
+        <di:waypoint x="610" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08i2hn9_di" bpmnElement="Flow_08i2hn9">
+        <di:waypoint x="410" y="350" />
+        <di:waypoint x="460" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1g0313m_di" bpmnElement="Flow_1g0313m">
+        <di:waypoint x="268" y="350" />
+        <di:waypoint x="310" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_133e52n_di" bpmnElement="GetApplicationDataTask">
+        <dc:Bounds x="310" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1nx5joz_di" bpmnElement="SelectStrategiesTask">
+        <dc:Bounds x="460" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1otudp7_di" bpmnElement="ScoringByStrategyTask">
+        <dc:Bounds x="610" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1uul29b_di" bpmnElement="SendResponseTask">
+        <dc:Bounds x="910" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0bj6g5z_di" bpmnElement="DetermineResultTask">
+        <dc:Bounds x="760" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent">
+        <dc:Bounds x="232" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_18e563f_di" bpmnElement="EndEvent">
+        <dc:Bounds x="1052" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0s7wf09_di" bpmnElement="TextAnnotation_0s7wf09">
+        <dc:Bounds x="220" y="210" width="130" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0z1ju7u_di" bpmnElement="Association_0z1ju7u">
+        <di:waypoint x="256" y="333" />
+        <di:waypoint x="285" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0afyqu1_di" bpmnElement="Association_0afyqu1">
+        <di:waypoint x="976" y="310" />
+        <di:waypoint x="996" y="261" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_0qamp85_di" bpmnElement="Participant_0qamp85" isHorizontal="true" bioc:stroke="rgb(251, 140, 0)" bioc:fill="rgb(255, 224, 178)">
+        <dc:Bounds x="180" y="500" width="930" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_1ubnu4a_di" bpmnElement="Participant_1ubnu4a" isHorizontal="true" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <dc:Bounds x="180" y="80" width="300" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0v5dn3z_di" bpmnElement="Flow_0v5dn3z">
+        <di:waypoint x="250" y="500" />
+        <di:waypoint x="250" y="368" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="254" y="473" width="51" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pfg5qx_di" bpmnElement="Flow_1pfg5qx">
+        <di:waypoint x="360" y="310" />
+        <di:waypoint x="360" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="364" y="163" width="51" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0g92mxl_di" bpmnElement="Flow_0g92mxl">
+        <di:waypoint x="960" y="390" />
+        <di:waypoint x="960" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="965" y="475" width="29" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

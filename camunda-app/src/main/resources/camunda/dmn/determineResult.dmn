@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="Definitions_0bfwrq7" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="3.7.3">
+  <decision id="determineResult" name="Определение результата">
+    <decisionTable id="decisionTable_1">
+      <input id="input_1" label="Решение" camunda:inputVariable="decision">
+        <inputExpression id="inputExpression_1" typeRef="string">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="output_1" label="Результат" name="result" typeRef="string" />
+      <rule id="DecisionRule_153vmwt">
+        <inputEntry id="UnaryTests_13dhveh">
+          <text>REJECT</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1khmai2">
+          <text>REJECT</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1xgpa16">
+        <inputEntry id="UnaryTests_1njofqo">
+          <text>ERROR</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0lrj557">
+          <text>REJECT</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_01g7jt9">
+        <inputEntry id="UnaryTests_0qao20h">
+          <text>OK</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1f5prt2">
+          <text>OK</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
