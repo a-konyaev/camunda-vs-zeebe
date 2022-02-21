@@ -7,3 +7,4 @@ pluginManagement {
 rootProject.name = "camunda-vs-zeebe"
 
 include("camunda-app")
+include("storage-mock")

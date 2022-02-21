@@ -6,7 +6,7 @@ spring:
     show_sql: false
 
 springdoc:
-  packagesToScan: ru.akonyaev.zeebe.demo.controller
+  packagesToScan: ru.akonyaev.camunda.controller
   pathsToMatch: /process/**
 
 camunda:
