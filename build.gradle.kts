@@ -18,12 +18,6 @@ allprojects {
     repositories {
         maven("https://repo1.maven.org/maven2/")
     }
-
-    // TODO why is *-plain.jar created without this?
-    tasks.withType<Jar> {
-        if (this !is BootJar)
-            enabled = false
-    }
 }
 
 subprojects {

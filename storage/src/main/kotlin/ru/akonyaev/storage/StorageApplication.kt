@@ -1,11 +1,11 @@
-package ru.akonyaev.storagemock
+package ru.akonyaev.storage
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class StorageMockApplication
+class StorageApplication
 
 fun main(args: Array<String>) {
-    runApplication<StorageMockApplication>(*args)
+    runApplication<StorageApplication>(*args)
 }

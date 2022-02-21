@@ -1,6 +1,6 @@
 FROM bellsoft/liberica-openjre-alpine:17
 
-ARG APP="storage-mock"
+ARG APP="storage"
 
 WORKDIR /opt/app
 COPY ./build/libs/$APP.jar .

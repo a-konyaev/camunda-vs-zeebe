@@ -37,3 +37,6 @@ camunda:
       id: demo
       password: demo
       firstName: Demo
+
+services:
+  storage: http://localhost:8082/
