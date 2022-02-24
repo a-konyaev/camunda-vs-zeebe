@@ -4,6 +4,19 @@ spring:
     hibernate:
       use-new-id-generator-mappings: false
     show_sql: false
+  kafka:
+    username: camunda-app
+    bootstrap-servers: localhost:9093
+    consumer:
+      group-id: ${spring.kafka.username}.group
+      client-id: ${spring.kafka.username}.client
+      auto-offset-reset: latest
+      enable-auto-commit: false
+      max-poll-records: 10
+      properties:
+        allow.auto.create.topics: false
+    properties:
+      security.protocol: PLAINTEXT
 
 springdoc:
   packagesToScan: ru.akonyaev.camunda.controller
@@ -39,4 +52,5 @@ camunda:
       firstName: Demo
 
 services:
-  storage: http://localhost:8082/
+  storage: http://localhost:8091/
+  scoring: http://localhost:8092/

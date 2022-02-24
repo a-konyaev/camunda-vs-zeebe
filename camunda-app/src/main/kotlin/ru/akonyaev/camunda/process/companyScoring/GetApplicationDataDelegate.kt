@@ -3,14 +3,18 @@ package ru.akonyaev.camunda.process.companyScoring
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.JavaDelegate
 import org.springframework.stereotype.Component
-import ru.akonyaev.camunda.client.StorageClient
+import ru.akonyaev.camunda.interaction.StorageClient
+import ru.akonyaev.camunda.process.applicationId
+import ru.akonyaev.camunda.process.clientId
 
 @Component
 class GetApplicationDataDelegate(
-    val storageClient: StorageClient
+    private val storageClient: StorageClient
 ) : JavaDelegate {
 
     override fun execute(execution: DelegateExecution) {
-        storageClient.getApplication("111")
+        storageClient.getApplication(execution.applicationId).let {
+            execution.clientId = it.clientId
+        }
     }
 }

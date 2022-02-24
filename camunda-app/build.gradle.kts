@@ -14,4 +14,5 @@ dependencies {
     runtimeOnly("com.h2database:h2")
 
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springframework.kafka:spring-kafka")
 }

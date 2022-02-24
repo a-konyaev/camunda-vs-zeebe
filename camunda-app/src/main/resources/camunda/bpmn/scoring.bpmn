@@ -25,12 +25,12 @@
       <bpmn:incoming>Flow_1gco8c4</bpmn:incoming>
       <bpmn:outgoing>Flow_1b6xbdp</bpmn:outgoing>
       <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_1t6djb1">
-        <bpmn:condition xsi:type="bpmn:tFormalExpression">${execution.hasVariable("scoringResult")}</bpmn:condition>
+        <bpmn:condition xsi:type="bpmn:tFormalExpression">${execution.hasVariable("scoringResponse")}</bpmn:condition>
       </bpmn:conditionalEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_1afehqb" sourceRef="StartEvent" targetRef="SendScoringRequestTask" />
     <bpmn:sequenceFlow id="Flow_1gco8c4" sourceRef="SendScoringRequestTask" targetRef="ScoringDoneEvent" />
-    <bpmn:sequenceFlow id="Flow_1b6xbdp" sourceRef="ScoringDoneEvent" targetRef="EndEvent" />
+    <bpmn:sequenceFlow id="Flow_1b6xbdp" sourceRef="ScoringDoneEvent" targetRef="ProcessScoringResponseTask" />
     <bpmn:subProcess id="TimeoutSubprocess" triggeredByEvent="true">
       <bpmn:startEvent id="TimeoutEvent" name="5 min" isInterrupting="false">
         <bpmn:outgoing>Flow_0t2cahs</bpmn:outgoing>
@@ -44,23 +44,28 @@
         <bpmn:escalationEventDefinition id="EscalationEventDefinition_0upa5at" escalationRef="Escalation_110t19v" />
       </bpmn:endEvent>
     </bpmn:subProcess>
-    <bpmn:endEvent id="EndEvent">
-      <bpmn:incoming>Flow_1b6xbdp</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:startEvent id="StartEvent">
       <bpmn:outgoing>Flow_1afehqb</bpmn:outgoing>
     </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1249yi0" sourceRef="ProcessScoringResponseTask" targetRef="EndEvent" />
+    <bpmn:endEvent id="EndEvent">
+      <bpmn:incoming>Flow_1249yi0</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="ProcessScoringResponseTask" name="Process scoring response" camunda:asyncBefore="true" camunda:delegateExpression="${processScoringResponseDelegate}">
+      <bpmn:incoming>Flow_1b6xbdp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1249yi0</bpmn:outgoing>
+    </bpmn:serviceTask>
     <bpmn:textAnnotation id="TextAnnotation_1rwocuh">
       <bpmn:text>Input:
-- companyId: String
+- clientId: String
 - strategy: String</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="TextAnnotation_1irtge2">
       <bpmn:text>Output:
 - scoringResult: String</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_0f0ecsh" sourceRef="EndEvent" targetRef="TextAnnotation_1irtge2" />
     <bpmn:association id="Association_18tfb72" sourceRef="StartEvent" targetRef="TextAnnotation_1rwocuh" />
+    <bpmn:association id="Association_0f0ecsh" sourceRef="EndEvent" targetRef="TextAnnotation_1irtge2" />
   </bpmn:process>
   <bpmn:escalation id="Escalation_110t19v" name="SCORING_TIMEOUT" escalationCode="SCORING_TIMEOUT" />
   <bpmn:message id="Message_17lvtxn" name="SCORING_RESPONSE" />
@@ -71,7 +76,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1b6xbdp_di" bpmnElement="Flow_1b6xbdp">
         <di:waypoint x="498" y="390" />
-        <di:waypoint x="692" y="390" />
+        <di:waypoint x="560" y="390" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1gco8c4_di" bpmnElement="Flow_1gco8c4">
         <di:waypoint x="401" y="390" />
@@ -81,6 +86,16 @@
         <di:waypoint x="246" y="390" />
         <di:waypoint x="301" y="390" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1249yi0_di" bpmnElement="Flow_1249yi0">
+        <di:waypoint x="660" y="390" />
+        <di:waypoint x="709" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1ckxibe_di" bpmnElement="EndEvent">
+        <dc:Bounds x="709" y="372" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_075c8rb_di" bpmnElement="ProcessScoringResponseTask">
+        <dc:Bounds x="560" y="350" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0qqq5o5_di" bpmnElement="WaitResponseSubprocess" isExpanded="true">
         <dc:Bounds x="420" y="200" width="200" height="120" />
       </bpmndi:BPMNShape>
@@ -125,9 +140,6 @@
           <dc:Bounds x="315" y="555" width="77" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1ckxibe_di" bpmnElement="EndEvent">
-        <dc:Bounds x="692" y="372" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_19o0xa7_di" bpmnElement="StartEvent">
         <dc:Bounds x="210" y="372" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -137,13 +149,13 @@
       <bpmndi:BPMNShape id="TextAnnotation_1irtge2_di" bpmnElement="TextAnnotation_1irtge2">
         <dc:Bounds x="640" y="200" width="140" height="39" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0f0ecsh_di" bpmnElement="Association_0f0ecsh">
-        <di:waypoint x="711" y="372" />
-        <di:waypoint x="724" y="239" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_18tfb72_di" bpmnElement="Association_18tfb72">
         <di:waypoint x="232" y="373" />
         <di:waypoint x="259" y="253" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0f0ecsh_di" bpmnElement="Association_0f0ecsh">
+        <di:waypoint x="726" y="372" />
+        <di:waypoint x="726" y="239" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_12o2x6u_di" bpmnElement="Participant_12o2x6u" isHorizontal="true" bioc:stroke="rgb(251, 140, 0)" bioc:fill="rgb(255, 224, 178)">
         <dc:Bounds x="160" y="70" width="501" height="60" />

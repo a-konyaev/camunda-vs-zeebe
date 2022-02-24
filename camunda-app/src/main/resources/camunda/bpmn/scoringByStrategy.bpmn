@@ -10,6 +10,9 @@
     <bpmn:callActivity id="ScoringTask" name="Scoring" camunda:asyncBefore="true" calledElement="ScoringProcess">
       <bpmn:extensionElements>
         <camunda:in businessKey="#{execution.processBusinessKey}" />
+        <camunda:in source="clientId" target="clientId" />
+        <camunda:in source="strategy" target="strategy" />
+        <camunda:out source="scoringResult" target="scoringResult" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_07wlxfi</bpmn:incoming>
       <bpmn:outgoing>Flow_05flq9d</bpmn:outgoing>
@@ -64,7 +67,7 @@
     </bpmn:boundaryEvent>
     <bpmn:textAnnotation id="TextAnnotation_0t5mq7b">
       <bpmn:text>Input:
-- companyId: String
+- clientId: String
 - strategy: String</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0cma5nd" sourceRef="StartEvent_1" targetRef="TextAnnotation_0t5mq7b" />

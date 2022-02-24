@@ -1,0 +1,3 @@
+springdoc:
+  packagesToScan: ru.akonyaev.scoring
+  pathsToMatch: /**

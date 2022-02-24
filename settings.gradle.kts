@@ -8,4 +8,5 @@ rootProject.name = "camunda-vs-zeebe"
 
 include("common")
 include("storage")
+include("scoring")
 include("camunda-app")
