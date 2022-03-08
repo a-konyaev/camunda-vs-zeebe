@@ -47,7 +47,7 @@ class Controller(
     private fun getResult(): ScoringResult {
         return when (Random.nextInt(0, 9)) {
             0 -> ScoringResult.ERROR
-            in 1..3 -> ScoringResult.REJECT
+            1 -> ScoringResult.REJECT
             else -> ScoringResult.OK
         }
     }
