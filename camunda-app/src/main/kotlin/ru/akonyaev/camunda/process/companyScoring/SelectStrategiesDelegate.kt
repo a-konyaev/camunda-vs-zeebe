@@ -10,6 +10,10 @@ import java.util.UUID
 class SelectStrategiesDelegate : JavaDelegate {
 
     override fun execute(execution: DelegateExecution) {
-        execution.strategies = (1..3).map { UUID.randomUUID().toString() }
+        execution.strategies = (1..STRATEGIES_COUNT).map { UUID.randomUUID().toString() }
+    }
+
+    companion object {
+        const val STRATEGIES_COUNT = 3
     }
 }

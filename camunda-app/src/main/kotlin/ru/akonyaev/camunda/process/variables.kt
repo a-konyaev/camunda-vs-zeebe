@@ -15,6 +15,16 @@ var DelegateExecution.strategies: List<String> by VariableDelegate(variableName 
 const val STRATEGY = "strategy"
 var DelegateExecution.strategy: String by VariableDelegate(STRATEGY)
 
+const val STRATEGY_INDEX = "strategyIndex"
+var DelegateExecution.strategyIndex: Int by VariableDelegate(STRATEGY_INDEX, defaultValue = -1)
+
+const val STRATEGY_SCORING_RESULT = "strategyScoringResult"
+var DelegateExecution.strategyScoringResult: String by VariableDelegate(STRATEGY_SCORING_RESULT)
+
+const val STRATEGY_SCORING_RESULTS = "strategyScoringResults"
+var DelegateExecution.strategyScoringResults: List<String>
+    by VariableDelegate(variableName = STRATEGY_SCORING_RESULTS, defaultValue = listOf())
+
 const val CORRELATION_ID = "correlationId"
 var DelegateExecution.correlationId: String by VariableDelegate(CORRELATION_ID)
 

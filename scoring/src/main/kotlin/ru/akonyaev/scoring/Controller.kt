@@ -42,7 +42,13 @@ class Controller(
         kafkaTemplate.send(Topics.SCORING_RESPONSE_TOPIC, response.serialize())
     }
 
-    private fun ignoreRequest() = Random.nextInt(1, 100) == 1
+    private fun ignoreRequest() = Random.nextInt(0, 99) == 0
 
-    private fun getResult() = if (Random.nextInt(1, 10) == 1) ScoringResult.ERROR else ScoringResult.OK
+    private fun getResult(): ScoringResult {
+        return when (Random.nextInt(0, 9)) {
+            0 -> ScoringResult.ERROR
+            in 1..3 -> ScoringResult.REJECT
+            else -> ScoringResult.OK
+        }
+    }
 }

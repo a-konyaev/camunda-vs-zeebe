@@ -73,7 +73,6 @@
     <bpmn:association id="Association_0cma5nd" sourceRef="StartEvent_1" targetRef="TextAnnotation_0t5mq7b" />
     <bpmn:textAnnotation id="TextAnnotation_1ltnsp5">
       <bpmn:text>Output:
-- strategy: String (??)
 - scoringResult: String</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0cjml7v" sourceRef="ErrorEndEvent" targetRef="TextAnnotation_1ltnsp5" />
@@ -175,7 +174,7 @@
         <dc:Bounds x="180" y="133" width="150" height="53" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1ltnsp5_di" bpmnElement="TextAnnotation_1ltnsp5">
-        <dc:Bounds x="940" y="133" width="140" height="53" />
+        <dc:Bounds x="940" y="133" width="140" height="39" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0ba22yy_di" bpmnElement="TimeoutEscalationEvent">
         <dc:Bounds x="432" y="282" width="36" height="36" />
@@ -186,7 +185,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_0cjml7v_di" bpmnElement="Association_0cjml7v">
         <di:waypoint x="1055" y="243" />
-        <di:waypoint x="1038" y="186" />
+        <di:waypoint x="1035" y="172" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
