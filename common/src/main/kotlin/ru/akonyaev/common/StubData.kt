@@ -1,5 +1,6 @@
 package ru.akonyaev.common
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.UUID
 
 data class StubData(
@@ -48,5 +49,7 @@ data class StubData(
             list4 = strList,
             list5 = strList
         )
+
+        val VALUE_STR: String = ObjectMapper().writeValueAsString(VALUE)
     }
 }

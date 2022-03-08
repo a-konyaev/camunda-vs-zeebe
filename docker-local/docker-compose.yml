@@ -50,6 +50,10 @@ services:
       - "8092:8080"
     networks:
       - camunda-vs-zeebe
+    depends_on:
+      - kafka
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
 
   camunda-db:
     container_name: camunda-db
@@ -74,7 +78,9 @@ services:
       - camunda-vs-zeebe
     depends_on:
       - storage
+      - scoring
       - camunda-db
+      - kafka
     environment:
       CAMUNDA_DATASOURCE_JDBC_URL: jdbc:postgresql://camunda-db:5432/demo
       SERVICES_STORAGE: http://storage:8080/

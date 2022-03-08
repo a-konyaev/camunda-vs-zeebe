@@ -5,15 +5,22 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.MediaType
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import ru.akonyaev.common.ScoringRequest
+import ru.akonyaev.common.ScoringResponse
+import ru.akonyaev.common.ScoringResult
+import ru.akonyaev.common.Topics
 import javax.validation.Valid
+import kotlin.random.Random
 
 @Tag(name = "Scoring service")
 @RestController
-class Controller {
+class Controller(
+    private val kafkaTemplate: KafkaTemplate<String, String>
+) {
 
     @Operation(summary = "Провести скоринг клиента")
     @ApiResponses(
@@ -24,7 +31,18 @@ class Controller {
         ]
     )
     @PostMapping("/score", produces = [MediaType.TEXT_PLAIN_VALUE])
-    fun score(@Valid @RequestBody request: ScoringRequest): String {
-        return ""
+    fun score(@Valid @RequestBody request: ScoringRequest) {
+        if (ignoreRequest()) return
+
+        val response = ScoringResponse(
+            applicationId = request.applicationId,
+            correlationId = request.correlationId,
+            scoringResult = getResult()
+        )
+        kafkaTemplate.send(Topics.SCORING_RESPONSE_TOPIC, response.serialize())
     }
+
+    private fun ignoreRequest() = Random.nextInt(1, 100) == 1
+
+    private fun getResult() = if (Random.nextInt(1, 10) == 1) ScoringResult.ERROR else ScoringResult.OK
 }

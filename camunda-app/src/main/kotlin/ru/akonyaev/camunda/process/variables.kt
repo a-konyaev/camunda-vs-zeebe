@@ -29,3 +29,6 @@ var DelegateExecution.isScoringResultError: Boolean by VariableDelegate(IS_SCORI
 
 const val SCORING_RESPONSE_LENGTH = "scoringResponseLength"
 var DelegateExecution.scoringResponseLength: Int by VariableDelegate(SCORING_RESPONSE_LENGTH)
+
+const val RETRIES = "retries"
+var DelegateExecution.retries: Int by VariableDelegate(RETRIES, defaultValue = 0)
