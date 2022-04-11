@@ -38,9 +38,7 @@ class ProcessController(
             request.applicationId,
             request.toProcessVariablesMap()
         ).id
-        logger.info {
-            "New process instance with id = $id started on request: $request"
-        }
+//        logger.info { "New process instance with id = $id started on request: $request" }
         return id
     }
 

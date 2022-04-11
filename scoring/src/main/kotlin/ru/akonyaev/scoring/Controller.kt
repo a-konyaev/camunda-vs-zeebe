@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import mu.KLogging
 import org.springframework.http.MediaType
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.web.bind.annotation.PostMapping
@@ -32,7 +33,10 @@ class Controller(
     )
     @PostMapping("/score", produces = [MediaType.TEXT_PLAIN_VALUE])
     fun score(@Valid @RequestBody request: ScoringRequest) {
-        if (ignoreRequest()) return
+//        if (ignoreRequest()) {
+//            logger.info { "Request appId=${request.applicationId} ignored" }
+//            return
+//        }
 
         val response = ScoringResponse(
             applicationId = request.applicationId,
@@ -42,13 +46,15 @@ class Controller(
         kafkaTemplate.send(Topics.SCORING_RESPONSE_TOPIC, response.serialize())
     }
 
-    private fun ignoreRequest() = Random.nextInt(0, 99) == 0
+    private fun ignoreRequest() = Random.nextInt(1, 100) == 1
 
     private fun getResult(): ScoringResult {
-        return when (Random.nextInt(0, 9)) {
-            0 -> ScoringResult.ERROR
+        return when (Random.nextInt(1, 20)) {
+//            0 -> ScoringResult.ERROR
             1 -> ScoringResult.REJECT
             else -> ScoringResult.OK
         }
     }
+
+    companion object : KLogging()
 }

@@ -15,8 +15,8 @@ ENV MALLOC_ARENA_MAX="4" \
       -XX:+AlwaysActAsServerClassMachine \
       -XX:+UseParallelGC \
       -XX:ActiveProcessorCount=2 \
-      -Xms500m \
-      -Xmx500m \
+      -Xms1000m \
+      -Xmx1000m \
     "
 
 EXPOSE 8080

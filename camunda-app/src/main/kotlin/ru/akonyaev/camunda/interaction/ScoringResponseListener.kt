@@ -18,8 +18,8 @@ class ScoringResponseListener(
 
     @KafkaListener(topics = [Topics.SCORING_RESPONSE_TOPIC])
     fun handle(data: String) {
-        logger.info { "Scoring response: $data" }
         val response = ScoringResponse.deserialize(data)
+        logger.info { "Scoring response for appId: ${response.applicationId}" }
 
         runtimeService
             .createMessageCorrelation(SCORING_RESPONSE_MESSAGE)

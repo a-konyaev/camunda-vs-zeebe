@@ -32,10 +32,10 @@
     <bpmn:sequenceFlow id="Flow_1gco8c4" sourceRef="SendScoringRequestTask" targetRef="ScoringDoneEvent" />
     <bpmn:sequenceFlow id="Flow_1b6xbdp" sourceRef="ScoringDoneEvent" targetRef="ProcessScoringResponseTask" />
     <bpmn:subProcess id="TimeoutSubprocess" triggeredByEvent="true">
-      <bpmn:startEvent id="TimeoutEvent" name="5 min" isInterrupting="false">
+      <bpmn:startEvent id="TimeoutEvent" name="5 sec" isInterrupting="false">
         <bpmn:outgoing>Flow_0t2cahs</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_1spnyq3">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5S</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_0t2cahs" sourceRef="TimeoutEvent" targetRef="TimeoutEscalationEndEvent" />
@@ -74,6 +74,10 @@
       <bpmndi:BPMNShape id="Participant_02aifng_di" bpmnElement="Scoring" isHorizontal="true">
         <dc:Bounds x="160" y="180" width="640" height="430" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1249yi0_di" bpmnElement="Flow_1249yi0">
+        <di:waypoint x="660" y="390" />
+        <di:waypoint x="709" y="390" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1b6xbdp_di" bpmnElement="Flow_1b6xbdp">
         <di:waypoint x="498" y="390" />
         <di:waypoint x="560" y="390" />
@@ -86,16 +90,6 @@
         <di:waypoint x="246" y="390" />
         <di:waypoint x="301" y="390" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1249yi0_di" bpmnElement="Flow_1249yi0">
-        <di:waypoint x="660" y="390" />
-        <di:waypoint x="709" y="390" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_1ckxibe_di" bpmnElement="EndEvent">
-        <dc:Bounds x="709" y="372" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_075c8rb_di" bpmnElement="ProcessScoringResponseTask">
-        <dc:Bounds x="560" y="350" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0qqq5o5_di" bpmnElement="WaitResponseSubprocess" isExpanded="true">
         <dc:Bounds x="420" y="200" width="200" height="120" />
       </bpmndi:BPMNShape>
@@ -142,6 +136,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_19o0xa7_di" bpmnElement="StartEvent">
         <dc:Bounds x="210" y="372" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ckxibe_di" bpmnElement="EndEvent">
+        <dc:Bounds x="709" y="372" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_075c8rb_di" bpmnElement="ProcessScoringResponseTask">
+        <dc:Bounds x="560" y="350" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1rwocuh_di" bpmnElement="TextAnnotation_1rwocuh">
         <dc:Bounds x="201" y="200" width="130" height="53" />
