@@ -1,9 +1,9 @@
-package ru.akonyaev.camunda.configuration
+package ru.akonyaev.common.configuration
 
 import org.springframework.cloud.openfeign.EnableFeignClients
 import org.springframework.context.annotation.Configuration
-import ru.akonyaev.camunda.interaction.ScoringClient
-import ru.akonyaev.camunda.interaction.StorageClient
+import ru.akonyaev.common.interaction.ScoringClient
+import ru.akonyaev.common.interaction.StorageClient
 
 @Configuration
 @EnableFeignClients(
@@ -12,4 +12,4 @@ import ru.akonyaev.camunda.interaction.StorageClient
         ScoringClient::class
     ]
 )
-class FeignConfiguration
+class ClientsConfiguration

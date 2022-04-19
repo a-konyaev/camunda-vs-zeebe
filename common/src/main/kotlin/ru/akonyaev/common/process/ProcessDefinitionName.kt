@@ -1,6 +1,4 @@
-package ru.akonyaev.camunda.process
-
-import ru.akonyaev.camunda.utils.ProcessDefinitionKey
+package ru.akonyaev.common.process
 
 enum class ProcessDefinitionName : ProcessDefinitionKey {
     CompanyScoringProcess,

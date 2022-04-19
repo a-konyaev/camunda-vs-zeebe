@@ -6,7 +6,7 @@ import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 import ru.akonyaev.camunda.process.applicationId
 import ru.akonyaev.camunda.process.scoringResult
-import ru.akonyaev.common.Topics
+import ru.akonyaev.common.properties.Topics
 
 @Component
 class SendResponseDelegate(

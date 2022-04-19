@@ -6,7 +6,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
-import ru.akonyaev.common.ApplicationData
+import ru.akonyaev.common.model.ApplicationData
 import java.util.UUID
 
 @Tag(name = "Application storage")

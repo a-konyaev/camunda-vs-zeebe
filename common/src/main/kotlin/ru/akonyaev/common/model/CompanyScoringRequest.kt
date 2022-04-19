@@ -1,7 +1,7 @@
-package ru.akonyaev.camunda.model
+package ru.akonyaev.common.model
 
 import io.swagger.v3.oas.annotations.media.Schema
-import ru.akonyaev.camunda.process.APPLICATION_ID
+import ru.akonyaev.common.process.APPLICATION_ID
 import javax.validation.constraints.NotBlank
 
 data class CompanyScoringRequest(
@@ -9,6 +9,7 @@ data class CompanyScoringRequest(
     @field:NotBlank
     val applicationId: String
 ) {
+
     fun toProcessVariablesMap() = mapOf(
         APPLICATION_ID to applicationId
     )

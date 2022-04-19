@@ -1,8 +1,8 @@
-package ru.akonyaev.camunda.interaction
+package ru.akonyaev.common.interaction
 
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.PostMapping
-import ru.akonyaev.common.ScoringRequest
+import ru.akonyaev.common.model.ScoringRequest
 
 @FeignClient(
     name = "scoring",

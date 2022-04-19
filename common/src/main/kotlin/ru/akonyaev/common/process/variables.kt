@@ -1,0 +1,15 @@
+package ru.akonyaev.common.process
+
+const val APPLICATION_ID = "applicationId"
+const val CLIENT_ID = "clientId"
+const val STRATEGIES = "strategies"
+const val STRATEGY = "strategy"
+const val STRATEGY_INDEX = "strategyIndex"
+const val STRATEGY_SCORING_RESULT = "strategyScoringResult"
+const val STRATEGY_SCORING_RESULTS = "strategyScoringResults"
+const val CORRELATION_ID = "correlationId"
+const val SCORING_RESPONSE = "scoringResponse"
+const val SCORING_RESULT = "scoringResult"
+const val IS_SCORING_RESULT_ERROR = "isScoringResultError"
+const val SCORING_RESPONSE_LENGTH = "scoringResponseLength"
+const val RETRIES = "retries"

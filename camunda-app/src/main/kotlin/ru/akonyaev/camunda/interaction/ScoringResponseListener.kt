@@ -4,12 +4,12 @@ import mu.KLogging
 import org.camunda.bpm.engine.RuntimeService
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
-import ru.akonyaev.camunda.process.CORRELATION_ID
-import ru.akonyaev.camunda.process.SCORING_RESPONSE
 import ru.akonyaev.camunda.process.SCORING_RESPONSE_MESSAGE
-import ru.akonyaev.camunda.process.SCORING_RESULT
-import ru.akonyaev.common.ScoringResponse
-import ru.akonyaev.common.Topics
+import ru.akonyaev.common.model.ScoringResponse
+import ru.akonyaev.common.process.CORRELATION_ID
+import ru.akonyaev.common.process.SCORING_RESPONSE
+import ru.akonyaev.common.process.SCORING_RESULT
+import ru.akonyaev.common.properties.Topics
 
 @Component
 class ScoringResponseListener(

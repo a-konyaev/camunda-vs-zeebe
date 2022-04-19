@@ -7,7 +7,7 @@ import ru.akonyaev.camunda.process.isScoringResultError
 import ru.akonyaev.camunda.process.scoringResponse
 import ru.akonyaev.camunda.process.scoringResponseLength
 import ru.akonyaev.camunda.process.scoringResult
-import ru.akonyaev.common.ScoringResult
+import ru.akonyaev.common.model.ScoringResult
 
 @Component
 class ProcessScoringResponseDelegate : JavaDelegate {

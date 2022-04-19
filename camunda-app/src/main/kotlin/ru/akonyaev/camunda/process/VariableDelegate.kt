@@ -1,4 +1,4 @@
-package ru.akonyaev.camunda.utils
+package ru.akonyaev.camunda.process
 
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import kotlin.properties.ReadWriteProperty

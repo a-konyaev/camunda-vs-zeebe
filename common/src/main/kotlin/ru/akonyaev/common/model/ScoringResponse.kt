@@ -1,4 +1,4 @@
-package ru.akonyaev.common
+package ru.akonyaev.common.model
 
 data class ScoringResponse(
     val applicationId: String,

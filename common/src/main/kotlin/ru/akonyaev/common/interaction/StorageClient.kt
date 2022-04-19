@@ -1,9 +1,9 @@
-package ru.akonyaev.camunda.interaction
+package ru.akonyaev.common.interaction
 
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import ru.akonyaev.common.ApplicationData
+import ru.akonyaev.common.model.ApplicationData
 
 @FeignClient(
     name = "storage",

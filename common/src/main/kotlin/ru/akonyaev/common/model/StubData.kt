@@ -1,4 +1,4 @@
-package ru.akonyaev.common
+package ru.akonyaev.common.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.UUID

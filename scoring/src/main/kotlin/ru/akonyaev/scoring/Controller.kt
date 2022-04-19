@@ -10,10 +10,10 @@ import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import ru.akonyaev.common.ScoringRequest
-import ru.akonyaev.common.ScoringResponse
-import ru.akonyaev.common.ScoringResult
-import ru.akonyaev.common.Topics
+import ru.akonyaev.common.model.ScoringRequest
+import ru.akonyaev.common.model.ScoringResponse
+import ru.akonyaev.common.model.ScoringResult
+import ru.akonyaev.common.properties.Topics
 import javax.validation.Valid
 import kotlin.random.Random
 
