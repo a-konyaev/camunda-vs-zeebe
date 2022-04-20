@@ -22,6 +22,10 @@ springdoc:
   packagesToScan: ru.akonyaev.camunda.controller
   pathsToMatch: /process/**
 
+services:
+  storage: http://localhost:8091/
+  scoring: http://localhost:8092/
+
 camunda:
   datasource:
     jdbc-url: jdbc:postgresql://localhost:5432/
@@ -40,7 +44,9 @@ camunda:
     database:
       schema-name: public
       table-prefix: public.
-    deployment-resource-pattern: "classpath*:/camunda/**/*.*"
+    deployment-resource-pattern:
+      - 'classpath*:bpmn/**/*.bpmn'
+      - 'classpath*:dmn/**/*.dmn'
     history-level: audit
     generic-properties:
       properties:
@@ -59,7 +65,3 @@ camunda:
       id: demo
       password: demo
       firstName: Demo
-
-services:
-  storage: http://localhost:8091/
-  scoring: http://localhost:8092/

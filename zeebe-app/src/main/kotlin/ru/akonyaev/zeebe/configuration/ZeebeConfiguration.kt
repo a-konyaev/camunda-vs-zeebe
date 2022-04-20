@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration
 import ru.akonyaev.zeebe.configuration.CustomZeebeJsonMapper
 
 @Configuration
-@ConditionalOnProperty("zeebe.enabled")
 @EnableZeebeClient
 @EnableConfigurationProperties(ZeebeClientConfigurationProperties::class)
 class ZeebeConfiguration {

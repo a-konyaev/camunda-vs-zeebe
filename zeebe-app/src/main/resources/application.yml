@@ -1,9 +1,4 @@
 spring:
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-    hibernate:
-      use-new-id-generator-mappings: false
-    show_sql: false
   kafka:
     username: camunda-app
     bootstrap-servers: localhost:9093
@@ -20,46 +15,23 @@ spring:
 
 springdoc:
   packagesToScan: ru.akonyaev.camunda.controller
-  pathsToMatch: /process/**
-
-camunda:
-  datasource:
-    jdbc-url: jdbc:postgresql://localhost:5432/
-    username: demo
-    password: demo
-    pool-name: camunda_db_pool
-    minimum-idle: 1
-    maximum-pool-size: 10
-    connection-test-query: SELECT 1
-    validation-timeout: 3500
-    idle-timeout: 13000
-    max-lifetime: 7200000
-    connection-timeout: 20000
-    leak-detection-threshold: 900000
-  bpm:
-    database:
-      schema-name: public
-      table-prefix: public.
-    deployment-resource-pattern: "classpath*:/camunda/**/*.*"
-    history-level: audit
-    generic-properties:
-      properties:
-        failed-job-retry-time-cycle: R3/PT5M
-        batch-operation-history-time-to-live: P30D
-        # history settings
-        history-time-to-live: P30D
-        history-cleanup-strategy: removalTimeBased
-        history-removal-time-strategy: end
-        history-cleanup-batch-size: 100
-        history-cleanup-batch-window-start-time: "00:00"
-        history-cleanup-batch-window-end-time: "06:00"
-        # to disable the Telemetry Settings dialog that appears in the Cockpit
-        initialize-telemetry: false
-    admin-user:
-      id: demo
-      password: demo
-      firstName: Demo
 
 services:
   storage: http://localhost:8091/
   scoring: http://localhost:8092/
+
+zeebe:
+  client:
+    # local zeebe ---------------------------------
+    broker:
+      gateway-address: localhost:26500
+    security:
+      plaintext: true
+    # zeebe in cloud ------------------------------:
+#    cloud:
+#      auth-url: 'https://login.cloud.camunda.io/oauth/token'
+#      base-url: 'zeebe.camunda.io'
+#      region: 'bru-2'
+#      cluster-id: '***'
+#      client-id: '***'
+#      client-secret: '***'
