@@ -115,21 +115,21 @@ services:
     environment:
       SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
 
-  zeebe-app:
-    container_name: zeebe-app
-    build:
-      context: ./../zeebe-app
-    image: zeebe-app:latest
-    ports:
-      - "8080:8080"
-    networks:
-      - camunda-vs-zeebe
-    depends_on:
-      - storage
-      - scoring
-      - kafka
-    environment:
-      - services.storage=http://storage:8080/
-      - services.scoring=http://scoring:8080/
-      - spring.kafka.bootstrapservers=kafka:9092
-      - zeebe.client.broker.gateway-address=zeebe:26500
+#  zeebe-app:
+#    container_name: zeebe-app
+#    build:
+#      context: ./../zeebe-app
+#    image: zeebe-app:latest
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - camunda-vs-zeebe
+#    depends_on:
+#      - storage
+#      - scoring
+#      - kafka
+#    environment:
+#      - services.storage=http://storage:8080/
+#      - services.scoring=http://scoring:8080/
+#      - spring.kafka.bootstrapservers=kafka:9092
+#      - zeebe.client.broker.gateway-address=zeebe:26500

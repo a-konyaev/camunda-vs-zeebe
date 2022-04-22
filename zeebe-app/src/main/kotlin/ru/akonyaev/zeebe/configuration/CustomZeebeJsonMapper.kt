@@ -86,7 +86,6 @@ class CustomZeebeJsonMapper(
         private fun defaultObjectMapper() =
             ObjectMapper()
                 .findAndRegisterModules()
-//                .registerModule(JavaTimeModule())
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .setTimeZone(TimeZone.getDefault())

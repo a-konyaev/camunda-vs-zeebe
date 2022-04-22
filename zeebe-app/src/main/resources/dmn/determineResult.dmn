@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ymu80w" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.0.0">
+  <decision id="determineResult" name="Определение результата">
+    <decisionTable id="DecisionTable_170cgtq" hitPolicy="FIRST">
+      <input id="Input_1" label="Результаты по стратегиям">
+        <inputExpression id="InputExpression_1" typeRef="boolean">
+          <text>strategyScoringResults</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Итоговый результат" name="scoringResult" typeRef="string" />
+      <rule id="DecisionRule_05dkqyd">
+        <inputEntry id="UnaryTests_15fy0i9">
+          <text>list contains(strategyScoringResults, "ERROR")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_18y44uc">
+          <text>"ERROR"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1pddhhr">
+        <inputEntry id="UnaryTests_0tia2dl">
+          <text>list contains(strategyScoringResults, "REJECT")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04e7gt1">
+          <text>"REJECT"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_123vm8j">
+        <inputEntry id="UnaryTests_0pn5zy9">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0gqs6hm">
+          <text>"OK"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="determineResult">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
