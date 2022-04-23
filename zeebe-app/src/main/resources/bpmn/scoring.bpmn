@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_02xa14u" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.0.0">
+  <bpmn:collaboration id="Collaboration_0wqp9xh">
+    <bpmn:participant id="Scoring" name="Call scoring" processRef="ScoringProcess" />
+    <bpmn:participant id="Participant_1xr1bz8" name="Scoring service" />
+    <bpmn:messageFlow id="Flow_0t1m5xm" name="REST API" sourceRef="SendScoringRequestTask" targetRef="Participant_1xr1bz8" />
+    <bpmn:messageFlow id="Flow_0qk6xtn" name="Kafka" sourceRef="Participant_1xr1bz8" targetRef="ScoringDoneEvent" />
+  </bpmn:collaboration>
+  <bpmn:process id="ScoringProcess" isExecutable="true">
+    <bpmn:startEvent id="StartEvent">
+      <bpmn:outgoing>Flow_01lej36</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="SendScoringRequestTask" name="Send scoring request">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="send-scoring-request" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_01lej36</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tcixdf</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_01lej36" sourceRef="StartEvent" targetRef="SendScoringRequestTask" />
+    <bpmn:sequenceFlow id="Flow_1tcixdf" sourceRef="SendScoringRequestTask" targetRef="ScoringDoneEvent" />
+    <bpmn:sequenceFlow id="Flow_1fsf64w" sourceRef="ProcessScoringResponseTask" targetRef="EndEvent" />
+    <bpmn:subProcess id="TimeoutSubprocess" triggeredByEvent="true">
+      <bpmn:startEvent id="TimeoutEvent" name="5 sec" isInterrupting="false">
+        <bpmn:outgoing>Flow_1js3z3v</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_1byro9z">
+          <bpmn:timeDuration>PT5S</bpmn:timeDuration>
+        </bpmn:timerEventDefinition>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_1js3z3v" sourceRef="TimeoutEvent" targetRef="TimeoutErrorEndEvent" />
+      <bpmn:endEvent id="TimeoutErrorEndEvent" name="Scoring timeout">
+        <bpmn:incoming>Flow_1js3z3v</bpmn:incoming>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_1dmaii0" errorRef="Error_0fb5dfm" />
+      </bpmn:endEvent>
+    </bpmn:subProcess>
+    <bpmn:serviceTask id="ProcessScoringResponseTask" name="Process scoring response">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="process-scoring-response" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1irw71p</bpmn:incoming>
+      <bpmn:outgoing>Flow_1fsf64w</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent">
+      <bpmn:incoming>Flow_1fsf64w</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1irw71p" sourceRef="ScoringDoneEvent" targetRef="ProcessScoringResponseTask" />
+    <bpmn:intermediateCatchEvent id="ScoringDoneEvent" name="Response received">
+      <bpmn:incoming>Flow_1tcixdf</bpmn:incoming>
+      <bpmn:outgoing>Flow_1irw71p</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0pad3lm" messageRef="Message_2sqf2o1" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:textAnnotation id="TextAnnotation_03pg3j5">
+      <bpmn:text>Input:
+- clientId: String
+- strategy: String</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_0pvstec">
+      <bpmn:text>Output:
+- scoringResult: String</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_00yrvmq" sourceRef="StartEvent" targetRef="TextAnnotation_03pg3j5" />
+    <bpmn:association id="Association_1i7a7ln" sourceRef="EndEvent" targetRef="TextAnnotation_0pvstec" />
+  </bpmn:process>
+  <bpmn:message id="Message_2sqf2o1" name="SCORING_RESPONSE">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="= correlationId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:error id="Error_0fb5dfm" name="SCORING_TIMEOUT" errorCode="SCORING_TIMEOUT" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0wqp9xh">
+      <bpmndi:BPMNShape id="Participant_0ygbdcd_di" bpmnElement="Scoring" isHorizontal="true">
+        <dc:Bounds x="140" y="179" width="670" height="441" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1fsf64w_di" bpmnElement="Flow_1fsf64w">
+        <di:waypoint x="680" y="410" />
+        <di:waypoint x="733" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1irw71p_di" bpmnElement="Flow_1irw71p">
+        <di:waypoint x="508" y="410" />
+        <di:waypoint x="580" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tcixdf_di" bpmnElement="Flow_1tcixdf">
+        <di:waypoint x="400" y="410" />
+        <di:waypoint x="472" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01lej36_di" bpmnElement="Flow_01lej36">
+        <di:waypoint x="238" y="410" />
+        <di:waypoint x="300" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent">
+        <dc:Bounds x="202" y="392" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vixo9u_di" bpmnElement="SendScoringRequestTask">
+        <dc:Bounds x="300" y="370" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1j4i9yu_di" bpmnElement="ProcessScoringResponseTask">
+        <dc:Bounds x="580" y="370" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_15vzd4x_di" bpmnElement="EndEvent">
+        <dc:Bounds x="733" y="392" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1afudg6_di" bpmnElement="ScoringDoneEvent">
+        <dc:Bounds x="472" y="392" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="466" y="435" width="50" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05nzduf_di" bpmnElement="TimeoutSubprocess" isExpanded="true">
+        <dc:Bounds x="200" y="480" width="200" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1js3z3v_di" bpmnElement="Flow_1js3z3v">
+        <di:waypoint x="268" y="540" />
+        <di:waypoint x="332" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0wmp0rh_di" bpmnElement="TimeoutEvent">
+        <dc:Bounds x="232" y="522" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="237" y="565" width="27" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0snhw4k_di" bpmnElement="TimeoutErrorEndEvent">
+        <dc:Bounds x="332" y="522" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="312" y="565" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_03pg3j5_di" bpmnElement="TextAnnotation_03pg3j5">
+        <dc:Bounds x="190" y="200" width="129" height="64" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0pvstec_di" bpmnElement="TextAnnotation_0pvstec">
+        <dc:Bounds x="660" y="200" width="130" height="40" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_00yrvmq_di" bpmnElement="Association_00yrvmq">
+        <di:waypoint x="222" y="392" />
+        <di:waypoint x="235" y="264" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1i7a7ln_di" bpmnElement="Association_1i7a7ln">
+        <di:waypoint x="751" y="392" />
+        <di:waypoint x="751" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_0f0vwjq_di" bpmnElement="Participant_1xr1bz8" isHorizontal="true">
+        <dc:Bounds x="140" y="70" width="670" height="60" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0t1m5xm_di" bpmnElement="Flow_0t1m5xm">
+        <di:waypoint x="350" y="370" />
+        <di:waypoint x="350" y="130" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="356" y="153" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qk6xtn_di" bpmnElement="Flow_0qk6xtn">
+        <di:waypoint x="490" y="130" />
+        <di:waypoint x="490" y="392" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="496" y="153" width="29" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_12om56u" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.0.0">
+  <bpmn:collaboration id="Collaboration_1esury4">
+    <bpmn:participant id="ScoringByStrategy" name="Scoring by strategy" processRef="ScoringByStrategyProcess" />
+  </bpmn:collaboration>
+  <bpmn:process id="ScoringByStrategyProcess" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0c04u9k</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0c04u9k" sourceRef="StartEvent_1" targetRef="LoopStartGateway" />
+    <bpmn:exclusiveGateway id="CheckResultGateway" name="What result?" default="Flow_1rhzewp">
+      <bpmn:incoming>Flow_13n3r2m</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rhzewp</bpmn:outgoing>
+      <bpmn:outgoing>Flow_19wahw4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:callActivity id="ScoringTask" name="Scoring">
+      <bpmn:extensionElements>
+        <zeebe:calledElement processId="ScoringProcess" propagateAllChildVariables="false" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= clientId" target="clientId" />
+          <zeebe:input source="= strategy" target="strategy" />
+          <zeebe:output source="= scoringResult" target="scoringResult" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0e9ssha</bpmn:incoming>
+      <bpmn:outgoing>Flow_13n3r2m</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:serviceTask id="IncreaseRetryCounterTask" name="Increase retry counter">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="increase-retry-counter" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_14rnwhv</bpmn:incoming>
+      <bpmn:outgoing>Flow_1b9uapr</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0e9ssha" sourceRef="LoopStartGateway" targetRef="ScoringTask" />
+    <bpmn:sequenceFlow id="Flow_13n3r2m" sourceRef="ScoringTask" targetRef="CheckResultGateway" />
+    <bpmn:sequenceFlow id="Flow_1rhzewp" sourceRef="CheckResultGateway" targetRef="SuccessfulEndEvent" />
+    <bpmn:sequenceFlow id="Flow_19wahw4" name="ERROR" sourceRef="CheckResultGateway" targetRef="ErrorOrTimeoutGateway">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= scoringResult = "ERROR"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_14rnwhv" sourceRef="ErrorOrTimeoutGateway" targetRef="IncreaseRetryCounterTask" />
+    <bpmn:sequenceFlow id="Flow_1b9uapr" sourceRef="IncreaseRetryCounterTask" targetRef="CheckRetryCounterGateway" />
+    <bpmn:sequenceFlow id="Flow_0rq40c0" name="Retries&#10;exceeded" sourceRef="CheckRetryCounterGateway" targetRef="ErrorEndEvent">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= retries &gt;= 3</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1hz1vci" sourceRef="CheckRetryCounterGateway" targetRef="LoopStartGateway" />
+    <bpmn:exclusiveGateway id="LoopStartGateway">
+      <bpmn:incoming>Flow_0c04u9k</bpmn:incoming>
+      <bpmn:incoming>Flow_1hz1vci</bpmn:incoming>
+      <bpmn:outgoing>Flow_0e9ssha</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="ErrorOrTimeoutGateway">
+      <bpmn:incoming>Flow_19wahw4</bpmn:incoming>
+      <bpmn:incoming>Flow_1nz4bh6</bpmn:incoming>
+      <bpmn:outgoing>Flow_14rnwhv</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="SuccessfulEndEvent" name="Success">
+      <bpmn:incoming>Flow_1rhzewp</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="ErrorEndEvent" name="Error">
+      <bpmn:incoming>Flow_0rq40c0</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="CheckRetryCounterGateway" default="Flow_1hz1vci">
+      <bpmn:incoming>Flow_1b9uapr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rq40c0</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1hz1vci</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:boundaryEvent id="TimeoutErrorEvent" attachedToRef="ScoringTask">
+      <bpmn:outgoing>Flow_1nz4bh6</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1m8u00l" errorRef="Error_14k83xq" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1nz4bh6" name="Timeout" sourceRef="TimeoutErrorEvent" targetRef="ErrorOrTimeoutGateway" />
+    <bpmn:textAnnotation id="TextAnnotation_1ab9ewj">
+      <bpmn:text>Output:
+- scoringResult: String</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1m7magb" sourceRef="SuccessfulEndEvent" targetRef="TextAnnotation_1ab9ewj" />
+    <bpmn:textAnnotation id="TextAnnotation_184w2dt">
+      <bpmn:text>Input:
+- clientId: String
+- strategy: String</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0dw5o5t" sourceRef="StartEvent_1" targetRef="TextAnnotation_184w2dt" />
+  </bpmn:process>
+  <bpmn:error id="Error_14k83xq" name="SCORING_TIMEOUT" errorCode="SCORING_TIMEOUT" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1esury4">
+      <bpmndi:BPMNShape id="Participant_0vmntb5_di" bpmnElement="ScoringByStrategy" isHorizontal="true">
+        <dc:Bounds x="129" y="79" width="951" height="311" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_184w2dt_di" bpmnElement="TextAnnotation_184w2dt">
+        <dc:Bounds x="170" y="99" width="142" height="60" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1hz1vci_di" bpmnElement="Flow_1hz1vci">
+        <di:waypoint x="910" y="265" />
+        <di:waypoint x="910" y="360" />
+        <di:waypoint x="290" y="360" />
+        <di:waypoint x="290" y="265" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rq40c0_di" bpmnElement="Flow_0rq40c0">
+        <di:waypoint x="935" y="240" />
+        <di:waypoint x="1012" y="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="946" y="206" width="48" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1b9uapr_di" bpmnElement="Flow_1b9uapr">
+        <di:waypoint x="840" y="240" />
+        <di:waypoint x="885" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14rnwhv_di" bpmnElement="Flow_14rnwhv">
+        <di:waypoint x="695" y="240" />
+        <di:waypoint x="740" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19wahw4_di" bpmnElement="Flow_19wahw4">
+        <di:waypoint x="575" y="240" />
+        <di:waypoint x="645" y="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="586" y="220" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rhzewp_di" bpmnElement="Flow_1rhzewp">
+        <di:waypoint x="550" y="215" />
+        <di:waypoint x="550" y="140" />
+        <di:waypoint x="652" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13n3r2m_di" bpmnElement="Flow_13n3r2m">
+        <di:waypoint x="470" y="240" />
+        <di:waypoint x="525" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0e9ssha_di" bpmnElement="Flow_0e9ssha">
+        <di:waypoint x="315" y="240" />
+        <di:waypoint x="370" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0c04u9k_di" bpmnElement="Flow_0c04u9k">
+        <di:waypoint x="215" y="240" />
+        <di:waypoint x="265" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nz4bh6_di" bpmnElement="Flow_1nz4bh6">
+        <di:waypoint x="450" y="298" />
+        <di:waypoint x="450" y="330" />
+        <di:waypoint x="670" y="330" />
+        <di:waypoint x="670" y="265" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="456" y="309" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ee2es9_di" bpmnElement="CheckResultGateway" isMarkerVisible="true">
+        <dc:Bounds x="525" y="215" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="519" y="272" width="62" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_02rd44f_di" bpmnElement="ScoringTask">
+        <dc:Bounds x="370" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mwf4p3_di" bpmnElement="IncreaseRetryCounterTask">
+        <dc:Bounds x="740" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0k9m67l_di" bpmnElement="LoopStartGateway" isMarkerVisible="true">
+        <dc:Bounds x="265" y="215" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0fltqh9_di" bpmnElement="ErrorOrTimeoutGateway" isMarkerVisible="true">
+        <dc:Bounds x="645" y="215" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_101gclm_di" bpmnElement="SuccessfulEndEvent">
+        <dc:Bounds x="652" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="649" y="165" width="42" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0owvnqd_di" bpmnElement="ErrorEndEvent">
+        <dc:Bounds x="1012" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1018" y="265" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1xfcxva_di" bpmnElement="CheckRetryCounterGateway" isMarkerVisible="true">
+        <dc:Bounds x="885" y="215" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1ab9ewj_di" bpmnElement="TextAnnotation_1ab9ewj">
+        <dc:Bounds x="740" y="99" width="130" height="41" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1m7magb_di" bpmnElement="Association_1m7magb">
+        <di:waypoint x="687" y="136" />
+        <di:waypoint x="740" y="125" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0dw5o5t_di" bpmnElement="Association_0dw5o5t">
+        <di:waypoint x="200" y="222" />
+        <di:waypoint x="212" y="159" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0sh9mtn_di" bpmnElement="TimeoutErrorEvent">
+        <dc:Bounds x="432" y="262" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
