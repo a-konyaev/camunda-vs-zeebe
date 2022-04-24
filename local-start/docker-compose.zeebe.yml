@@ -75,21 +75,36 @@ services:
       - zeebe
       - elasticsearch
 
-  tasklist:
-    container_name: tasklist
-    image: camunda/tasklist:8.0.0
+  monitor:
+    container_name: monitor
+    image: ghcr.io/camunda-community-hub/zeebe-simple-monitor:2.3.0
     ports:
-      - "8084:8080"
+      - "8082:8082"
     networks:
       - camunda-vs-zeebe
     environment:
-      - GRAPHQL_PLAYGROUND_ENABLED=true
-      - GRAPHQL_PLAYGROUND_SETTINGS_REQUEST_CREDENTIALS=include
+      - zeebe.client.broker.contactPoint=zeebe:26500
+      - zeebe.client.worker.hazelcast.connection=zeebe:5701
     volumes:
-      - ./tasklist/application.yml:/app/resources/application.yml
+      - ./monitor/application.yaml:/application.yaml
     depends_on:
       - zeebe
-      - elasticsearch
+
+#  tasklist:
+#    container_name: tasklist
+#    image: camunda/tasklist:8.0.0
+#    ports:
+#      - "8084:8080"
+#    networks:
+#      - camunda-vs-zeebe
+#    environment:
+#      - GRAPHQL_PLAYGROUND_ENABLED=true
+#      - GRAPHQL_PLAYGROUND_SETTINGS_REQUEST_CREDENTIALS=include
+#    volumes:
+#      - ./tasklist/application.yml:/app/resources/application.yml
+#    depends_on:
+#      - zeebe
+#      - elasticsearch
 
   storage:
     container_name: storage

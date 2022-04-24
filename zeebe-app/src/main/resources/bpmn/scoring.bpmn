@@ -24,14 +24,22 @@
       <bpmn:startEvent id="TimeoutEvent" name="5 sec" isInterrupting="false">
         <bpmn:outgoing>Flow_1js3z3v</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_1byro9z">
-          <bpmn:timeDuration>PT5S</bpmn:timeDuration>
+          <bpmn:timeDuration>PT500S</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
-      <bpmn:sequenceFlow id="Flow_1js3z3v" sourceRef="TimeoutEvent" targetRef="TimeoutErrorEndEvent" />
+      <bpmn:sequenceFlow id="Flow_1js3z3v" sourceRef="TimeoutEvent" targetRef="LogScoringTimeoutTask" />
       <bpmn:endEvent id="TimeoutErrorEndEvent" name="Scoring timeout">
-        <bpmn:incoming>Flow_1js3z3v</bpmn:incoming>
+        <bpmn:incoming>Flow_1cvfmvy</bpmn:incoming>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_1dmaii0" errorRef="Error_0fb5dfm" />
       </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1cvfmvy" sourceRef="LogScoringTimeoutTask" targetRef="TimeoutErrorEndEvent" />
+      <bpmn:serviceTask id="LogScoringTimeoutTask" name="Log scoring timeout">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="log-scoring-timeout" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1js3z3v</bpmn:incoming>
+        <bpmn:outgoing>Flow_1cvfmvy</bpmn:outgoing>
+      </bpmn:serviceTask>
     </bpmn:subProcess>
     <bpmn:serviceTask id="ProcessScoringResponseTask" name="Process scoring response">
       <bpmn:extensionElements>
@@ -73,13 +81,13 @@
         <dc:Bounds x="140" y="179" width="670" height="441" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1fsf64w_di" bpmnElement="Flow_1fsf64w">
-        <di:waypoint x="680" y="410" />
-        <di:waypoint x="733" y="410" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1irw71p_di" bpmnElement="Flow_1irw71p">
         <di:waypoint x="508" y="410" />
         <di:waypoint x="580" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1fsf64w_di" bpmnElement="Flow_1fsf64w">
+        <di:waypoint x="680" y="410" />
+        <di:waypoint x="733" y="410" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1tcixdf_di" bpmnElement="Flow_1tcixdf">
         <di:waypoint x="400" y="410" />
@@ -96,6 +104,33 @@
         <dc:Bounds x="300" y="370" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05nzduf_di" bpmnElement="TimeoutSubprocess" isExpanded="true">
+        <dc:Bounds x="200" y="480" width="308" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1js3z3v_di" bpmnElement="Flow_1js3z3v">
+        <di:waypoint x="268" y="540" />
+        <di:waypoint x="300" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cvfmvy_di" bpmnElement="Flow_1cvfmvy">
+        <di:waypoint x="400" y="540" />
+        <di:waypoint x="432" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0wmp0rh_di" bpmnElement="TimeoutEvent">
+        <dc:Bounds x="232" y="522" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="237" y="565" width="27" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1pe884t_di" bpmnElement="LogScoringTimeoutTask">
+        <dc:Bounds x="300" y="500" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0snhw4k_di" bpmnElement="TimeoutErrorEndEvent">
+        <dc:Bounds x="432" y="522" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="412" y="565" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1j4i9yu_di" bpmnElement="ProcessScoringResponseTask">
         <dc:Bounds x="580" y="370" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -106,25 +141,6 @@
         <dc:Bounds x="472" y="392" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="466" y="435" width="50" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05nzduf_di" bpmnElement="TimeoutSubprocess" isExpanded="true">
-        <dc:Bounds x="200" y="480" width="200" height="120" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1js3z3v_di" bpmnElement="Flow_1js3z3v">
-        <di:waypoint x="268" y="540" />
-        <di:waypoint x="332" y="540" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_0wmp0rh_di" bpmnElement="TimeoutEvent">
-        <dc:Bounds x="232" y="522" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="237" y="565" width="27" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0snhw4k_di" bpmnElement="TimeoutErrorEndEvent">
-        <dc:Bounds x="332" y="522" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="312" y="565" width="77" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_03pg3j5_di" bpmnElement="TextAnnotation_03pg3j5">

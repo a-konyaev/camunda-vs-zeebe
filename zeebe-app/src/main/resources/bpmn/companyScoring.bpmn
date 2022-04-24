@@ -63,8 +63,6 @@
     <bpmn:callActivity id="ScoringByStrategyTask" name="Scoring by strategy">
       <bpmn:extensionElements>
         <zeebe:ioMapping>
-          <zeebe:input source="= clientId" target="clientId" />
-          <zeebe:input source="= strategy" target="strategy" />
           <zeebe:output source="= scoringResult" target="strategyScoringResult" />
         </zeebe:ioMapping>
         <zeebe:calledElement processId="ScoringByStrategyProcess" propagateAllChildVariables="false" />
@@ -81,7 +79,7 @@
     <bpmn:sequenceFlow id="Flow_1oiijv5" sourceRef="DetermineResultTask" targetRef="SendResponseTask" />
     <bpmn:sequenceFlow id="Flow_13th0o3" sourceRef="SendResponseTask" targetRef="EndEvent" />
     <bpmn:sequenceFlow id="Flow_1t0y3nj" name="Has next strategy" sourceRef="Gateway_088nvux" targetRef="ScoringByStrategyTask">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= strategyIndex &lt; strategies.size()</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= strategyIndex &lt; count(strategies)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1ga5a8u" sourceRef="ScoringByStrategyTask" targetRef="Gateway_10wrq5r" />
     <bpmn:textAnnotation id="TextAnnotation_1uf9m7x">

@@ -17,8 +17,6 @@
       <bpmn:extensionElements>
         <zeebe:calledElement processId="ScoringProcess" propagateAllChildVariables="false" />
         <zeebe:ioMapping>
-          <zeebe:input source="= clientId" target="clientId" />
-          <zeebe:input source="= strategy" target="strategy" />
           <zeebe:output source="= scoringResult" target="scoringResult" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
@@ -66,6 +64,11 @@
       <bpmn:outgoing>Flow_1hz1vci</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:boundaryEvent id="TimeoutErrorEvent" attachedToRef="ScoringTask">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="= &#34;ERROR&#34;" target="scoringResult" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
       <bpmn:outgoing>Flow_1nz4bh6</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1m8u00l" errorRef="Error_14k83xq" />
     </bpmn:boundaryEvent>
@@ -89,10 +92,15 @@
         <dc:Bounds x="129" y="79" width="951" height="311" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_184w2dt_di" bpmnElement="TextAnnotation_184w2dt">
-        <dc:Bounds x="170" y="99" width="142" height="60" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1nz4bh6_di" bpmnElement="Flow_1nz4bh6">
+        <di:waypoint x="450" y="298" />
+        <di:waypoint x="450" y="330" />
+        <di:waypoint x="670" y="330" />
+        <di:waypoint x="670" y="265" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="456" y="309" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1hz1vci_di" bpmnElement="Flow_1hz1vci">
         <di:waypoint x="910" y="265" />
         <di:waypoint x="910" y="360" />
@@ -138,15 +146,6 @@
         <di:waypoint x="215" y="240" />
         <di:waypoint x="265" y="240" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1nz4bh6_di" bpmnElement="Flow_1nz4bh6">
-        <di:waypoint x="450" y="298" />
-        <di:waypoint x="450" y="330" />
-        <di:waypoint x="670" y="330" />
-        <di:waypoint x="670" y="265" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="456" y="309" width="40" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="222" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -189,6 +188,13 @@
         <dc:Bounds x="740" y="99" width="130" height="41" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_184w2dt_di" bpmnElement="TextAnnotation_184w2dt">
+        <dc:Bounds x="170" y="99" width="142" height="60" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0sh9mtn_di" bpmnElement="TimeoutErrorEvent">
+        <dc:Bounds x="432" y="262" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1m7magb_di" bpmnElement="Association_1m7magb">
         <di:waypoint x="687" y="136" />
         <di:waypoint x="740" y="125" />
@@ -197,9 +203,6 @@
         <di:waypoint x="200" y="222" />
         <di:waypoint x="212" y="159" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_0sh9mtn_di" bpmnElement="TimeoutErrorEvent">
-        <dc:Bounds x="432" y="262" width="36" height="36" />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

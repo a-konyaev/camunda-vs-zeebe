@@ -14,7 +14,8 @@ spring:
       security.protocol: PLAINTEXT
 
 springdoc:
-  packagesToScan: ru.akonyaev.camunda.controller
+  packagesToScan: ru.akonyaev.zeebe.controller
+  pathsToMatch: /process/**
 
 services:
   storage: http://localhost:8091/
