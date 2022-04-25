@@ -24,7 +24,7 @@
       <bpmn:startEvent id="TimeoutEvent" name="5 sec" isInterrupting="false">
         <bpmn:outgoing>Flow_1js3z3v</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_1byro9z">
-          <bpmn:timeDuration>PT500S</bpmn:timeDuration>
+          <bpmn:timeDuration>PT5S</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_1js3z3v" sourceRef="TimeoutEvent" targetRef="LogScoringTimeoutTask" />
@@ -68,6 +68,10 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_00yrvmq" sourceRef="StartEvent" targetRef="TextAnnotation_03pg3j5" />
     <bpmn:association id="Association_1i7a7ln" sourceRef="EndEvent" targetRef="TextAnnotation_0pvstec" />
+    <bpmn:textAnnotation id="TextAnnotation_1rx3zy1">
+      <bpmn:text>TTL = 5 sec</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1nnxdrz" sourceRef="ScoringDoneEvent" targetRef="TextAnnotation_1rx3zy1" />
   </bpmn:process>
   <bpmn:message id="Message_2sqf2o1" name="SCORING_RESPONSE">
     <bpmn:extensionElements>
@@ -79,6 +83,10 @@
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0wqp9xh">
       <bpmndi:BPMNShape id="Participant_0ygbdcd_di" bpmnElement="Scoring" isHorizontal="true">
         <dc:Bounds x="140" y="179" width="670" height="441" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1rx3zy1_di" bpmnElement="TextAnnotation_1rx3zy1">
+        <dc:Bounds x="520" y="290" width="100" height="30" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1irw71p_di" bpmnElement="Flow_1irw71p">
@@ -158,6 +166,10 @@
       <bpmndi:BPMNEdge id="Association_1i7a7ln_di" bpmnElement="Association_1i7a7ln">
         <di:waypoint x="751" y="392" />
         <di:waypoint x="751" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1nnxdrz_di" bpmnElement="Association_1nnxdrz">
+        <di:waypoint x="501" y="396" />
+        <di:waypoint x="559" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_0f0vwjq_di" bpmnElement="Participant_1xr1bz8" isHorizontal="true">
         <dc:Bounds x="140" y="70" width="670" height="60" />

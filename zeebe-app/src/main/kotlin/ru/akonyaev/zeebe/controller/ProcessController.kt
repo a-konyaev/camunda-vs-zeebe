@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.akonyaev.common.model.CompanyScoringRequest
 import ru.akonyaev.common.process.ProcessDefinitionName
-import java.util.concurrent.TimeUnit
 import javax.validation.Valid
 
 @Tag(name = "Company scoring (Zeebe)")
@@ -31,20 +30,20 @@ class ProcessController(
         ]
     )
     @PostMapping("/start", produces = [MediaType.TEXT_PLAIN_VALUE])
-    fun startProcess(@Valid @RequestBody request: CompanyScoringRequest): String {
+    fun startProcess(@Valid @RequestBody request: CompanyScoringRequest) {
         if (!clientLifecycle.isRunning) {
             throw IllegalStateException("Zeebe client is not started")
         }
 
         // TODO: check if process with the same applicationId already started
-        return clientLifecycle
+        clientLifecycle
             .newCreateInstanceCommand()
             .bpmnProcessId(ProcessDefinitionName.CompanyScoringProcess.name)
             .latestVersion()
             .variables(request.toProcessVariablesMap())
             .send()
-            .join(10, TimeUnit.SECONDS)
-            .processInstanceKey
-            .toString()
+//            .join(10, TimeUnit.SECONDS)
+//            .processInstanceKey
+//            .toString()
     }
 }
