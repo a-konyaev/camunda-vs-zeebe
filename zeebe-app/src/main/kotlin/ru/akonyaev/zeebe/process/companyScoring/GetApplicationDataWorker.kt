@@ -21,7 +21,7 @@ class GetApplicationDataWorker(
         job: ActivatedJob,
         @ZeebeVariable applicationId: String
     ): Map<String, Any> {
-        logger.info { "handle..." }
+        logger.debug { "handle..." }
         val appData = storageClient.getApplication(applicationId)
         return mapOf(CLIENT_ID to appData.clientId)
     }

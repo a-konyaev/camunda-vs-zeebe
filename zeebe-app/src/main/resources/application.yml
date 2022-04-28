@@ -36,3 +36,9 @@ zeebe:
 #      cluster-id: '***'
 #      client-id: '***'
 #      client-secret: '***'
+    worker:
+      max-jobs-active: 1000  # 32 by default
+      threads: 100 # 1 by default
+    job:
+      poll-interval: 50 # 100 msec by default
+

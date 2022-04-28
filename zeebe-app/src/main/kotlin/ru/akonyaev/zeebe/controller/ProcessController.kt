@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import mu.KLogging
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -42,8 +43,11 @@ class ProcessController(
             .latestVersion()
             .variables(request.toProcessVariablesMap())
             .send()
-//            .join(10, TimeUnit.SECONDS)
-//            .processInstanceKey
-//            .toString()
+            .exceptionally {
+                logger.error { "Starting new process with appId '${request.applicationId}' failed: $it" }
+                null
+            }
     }
+
+    companion object : KLogging()
 }

@@ -25,7 +25,7 @@ class SendScoringRequestWorker(
         @ZeebeVariable clientId: String,
         @ZeebeVariable strategy: String
     ): Map<String, Any> {
-        logger.info { "handle..." }
+        logger.debug { "handle..." }
 
         val request = ScoringRequest(
             applicationId = applicationId,

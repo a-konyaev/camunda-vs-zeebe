@@ -34,7 +34,7 @@ services:
   elasticsearch:
     container_name: elasticsearch
     image: elasticsearch:7.16.2
-    #    image: elasticsearch:8.1.2   ! not working with this version
+    #    image: elasticsearch:8.1.2   ! operate not working with this version
     ports:
       - "9200:9200"
     networks:
@@ -75,20 +75,20 @@ services:
       - zeebe
       - elasticsearch
 
-  monitor:
-    container_name: monitor
-    image: ghcr.io/camunda-community-hub/zeebe-simple-monitor:2.3.0
-    ports:
-      - "8082:8082"
-    networks:
-      - camunda-vs-zeebe
-    environment:
-      - zeebe.client.broker.contactPoint=zeebe:26500
-      - zeebe.client.worker.hazelcast.connection=zeebe:5701
-    volumes:
-      - ./monitor/application.yaml:/application.yaml
-    depends_on:
-      - zeebe
+#  monitor:
+#    container_name: monitor
+#    image: ghcr.io/camunda-community-hub/zeebe-simple-monitor:2.3.0
+#    ports:
+#      - "8082:8082"
+#    networks:
+#      - camunda-vs-zeebe
+#    environment:
+#      - zeebe.client.broker.contactPoint=zeebe:26500
+#      - zeebe.client.worker.hazelcast.connection=zeebe:5701
+#    volumes:
+#      - ./monitor/application.yaml:/application.yaml
+#    depends_on:
+#      - zeebe
 
 #  tasklist:
 #    container_name: tasklist
@@ -130,21 +130,21 @@ services:
     environment:
       SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
 
-#  zeebe-app:
-#    container_name: zeebe-app
-#    build:
-#      context: ./../zeebe-app
-#    image: zeebe-app:latest
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - camunda-vs-zeebe
-#    depends_on:
-#      - storage
-#      - scoring
-#      - kafka
-#    environment:
-#      - services.storage=http://storage:8080/
-#      - services.scoring=http://scoring:8080/
-#      - spring.kafka.bootstrapservers=kafka:9092
-#      - zeebe.client.broker.gateway-address=zeebe:26500
+  zeebe-app:
+    container_name: zeebe-app
+    build:
+      context: ./../zeebe-app
+    image: zeebe-app:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - camunda-vs-zeebe
+    depends_on:
+      - storage
+      - scoring
+      - kafka
+    environment:
+      - services.storage=http://storage:8080/
+      - services.scoring=http://scoring:8080/
+      - spring.kafka.bootstrapservers=kafka:9092
+      - zeebe.client.broker.gateway-address=zeebe:26500

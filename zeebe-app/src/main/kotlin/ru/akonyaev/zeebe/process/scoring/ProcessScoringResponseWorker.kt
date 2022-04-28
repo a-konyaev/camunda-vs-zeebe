@@ -21,7 +21,7 @@ class ProcessScoringResponseWorker {
         @ZeebeVariable scoringResult: String,
         @ZeebeVariable scoringResponse: String
     ): Map<String, Any> {
-        logger.info { "handle..." }
+        logger.debug { "handle..." }
 
         return mapOf(
             IS_SCORING_RESULT_ERROR to (scoringResult == ScoringResult.ERROR.name),

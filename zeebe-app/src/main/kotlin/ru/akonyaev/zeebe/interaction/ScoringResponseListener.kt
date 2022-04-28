@@ -35,15 +35,12 @@ class ScoringResponseListener(
                     SCORING_RESULT to response.scoringResult.name
                 )
             )
-            .timeToLive(Duration.ofSeconds(5))
+            .timeToLive(Duration.ofSeconds(60))
             .send()
-//            .join(10, TimeUnit.SECONDS)
-//            .messageKey
-
-//        logger.info {
-//            "Scoring response for appId '${response.applicationId}' " +
-//                "correlated with messageKey '$messageKey'"
-//        }
+            .exceptionally {
+                logger.error { "Scoring response for appId '${response.applicationId}' correlation failed: $it" }
+                null
+            }
     }
 
     companion object : KLogging()

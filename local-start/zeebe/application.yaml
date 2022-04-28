@@ -51,10 +51,10 @@ zeebe:
     data:
       # Specify a list of directories in which data is stored.
       # This setting can also be overridden using the environment variable ZEEBE_BROKER_DATA_DIRECTORIES.
-      directories: [data]
+      directories: data
       # The size of data log segment files.
       # This setting can also be overridden using the environment variable ZEEBE_BROKER_DATA_LOGSEGMENTSIZE.
-      logSegmentSize: 512MB
+      logSegmentSize: 128MB
       # How often we take snapshots of streams (time unit)
       # This setting can also be overridden using the environment variable ZEEBE_BROKER_DATA_SNAPSHOTPERIOD.
       snapshotPeriod: 15m
@@ -77,10 +77,15 @@ zeebe:
       # system (it has to run somewhere). For example, when running Zeebe on a machine
       # which has 4 cores, a good value would be 2.
       # This setting can also be overridden using the environment variable ZEEBE_BROKER_THREADS_CPUTHREADCOUNT
-      cpuThreadCount: 2
+      cpuThreadCount: 8
       # Controls the number of io threads to be used.
       # This setting can also be overridden using the environment variable ZEEBE_BROKER_THREADS_IOTHREADCOUNT
       ioThreadCount: 2
+
+    # disabled the backpressure to avoid RESOURCE_EXHAUSTED errors under load tests
+    backpressure:
+      enabled : false
+
     # Elasticsearch Exporter ----------
     # An example configuration for the elasticsearch exporter:
     #

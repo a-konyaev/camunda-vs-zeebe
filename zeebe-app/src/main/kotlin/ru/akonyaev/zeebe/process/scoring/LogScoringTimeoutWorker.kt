@@ -15,7 +15,7 @@ class LogScoringTimeoutWorker {
         client: JobClient,
         job: ActivatedJob
     ) {
-        logger.info { "handle..." }
+        logger.info { "Scoring timeout" }
     }
 
     companion object : KLogging()

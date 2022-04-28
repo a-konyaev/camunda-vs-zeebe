@@ -23,7 +23,7 @@ class NextStrategyWorker {
         @ZeebeVariable strategyScoringResult: String?,
         @ZeebeVariable strategyScoringResults: List<String>?,
     ): Map<String, Any> {
-        logger.info { "handle..." }
+        logger.debug { "handle..." }
 
         val returnMap = mutableMapOf<String, Any>()
         val index = strategyIndex ?: -1

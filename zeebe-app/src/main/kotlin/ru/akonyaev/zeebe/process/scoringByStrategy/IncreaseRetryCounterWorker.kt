@@ -18,7 +18,7 @@ class IncreaseRetryCounterWorker {
         job: ActivatedJob,
         @ZeebeVariable retries: Int?
     ): Map<String, Any> {
-        logger.info { "handle..." }
+        logger.debug { "handle..." }
 
         return mapOf(RETRIES to (retries ?: 0) + 1)
     }

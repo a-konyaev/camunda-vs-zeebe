@@ -22,7 +22,7 @@ class SendResponseWorker(
         @ZeebeVariable applicationId: String,
         @ZeebeVariable scoringResult: String
     ) {
-        logger.info { "handle..." }
+        logger.debug { "handle..." }
 
         kafkaTemplate.send(
             Topics.COMPANY_SCORING_RESPONSE_TOPIC,

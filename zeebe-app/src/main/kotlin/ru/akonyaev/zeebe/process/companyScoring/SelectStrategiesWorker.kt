@@ -17,7 +17,7 @@ class SelectStrategiesWorker {
         client: JobClient,
         job: ActivatedJob
     ): Map<String, Any> {
-        logger.info { "handle..." }
+        logger.debug { "handle..." }
 
         val strategies = (1..STRATEGIES_COUNT).map { UUID.randomUUID().toString() }
         return mapOf(STRATEGIES to strategies)
