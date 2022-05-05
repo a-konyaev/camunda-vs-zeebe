@@ -31,21 +31,21 @@ services:
         company-scoring-response:1:1,
         scoring-response:1:1
 
-  elasticsearch:
-    container_name: elasticsearch
-    image: elasticsearch:7.16.2
-    #    image: elasticsearch:8.1.2   ! operate not working with this version
-    ports:
-      - "9200:9200"
-    networks:
-      - camunda-vs-zeebe
-    environment:
-      - discovery.type=single-node
-      - cluster.name=elasticsearch
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-  #    volumes:
-  #      - elasticsearch_data:/usr/share/elasticsearch/data
+#  elasticsearch:
+#    container_name: elasticsearch
+#    image: elasticsearch:7.16.2
+#    #    image: elasticsearch:8.1.2   ! operate not working with this version
+#    ports:
+#      - "9200:9200"
+#    networks:
+#      - camunda-vs-zeebe
+#    environment:
+#      - discovery.type=single-node
+#      - cluster.name=elasticsearch
+#      - xpack.security.enabled=false
+#      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+#  #    volumes:
+#  #      - elasticsearch_data:/usr/share/elasticsearch/data
 
   zeebe:
     container_name: zeebe
@@ -56,24 +56,26 @@ services:
       - "5701:5701"
     networks:
       - camunda-vs-zeebe
+    environment:
+      - "JAVA_OPTS=-Xmx8g"
     volumes:
       - ./zeebe/zeebe-hazelcast-exporter-1.0.1-with-dependencies.jar:/usr/local/zeebe/exporters/zeebe-hazelcast-exporter.jar
       - ./zeebe/application.yaml:/usr/local/zeebe/config/application.yaml
     depends_on:
       - elasticsearch
 
-  operate:
-    container_name: operate
-    image: camunda/operate:8.0.0
-    ports:
-      - "8083:8080"
-    networks:
-      - camunda-vs-zeebe
-    volumes:
-      - ./operate/application.yml:/usr/local/operate/config/application.yml
-    depends_on:
-      - zeebe
-      - elasticsearch
+#  operate:
+#    container_name: operate
+#    image: camunda/operate:8.0.0
+#    ports:
+#      - "8083:8080"
+#    networks:
+#      - camunda-vs-zeebe
+#    volumes:
+#      - ./operate/application.yml:/usr/local/operate/config/application.yml
+#    depends_on:
+#      - zeebe
+#      - elasticsearch
 
 #  monitor:
 #    container_name: monitor
