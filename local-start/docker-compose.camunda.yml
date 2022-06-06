@@ -31,23 +31,13 @@ services:
         company-scoring-response:1:1,
         scoring-response:1:1
 
-  storage:
-    container_name: storage
+  external-service:
+    container_name: external-service
     build:
-      context: ./../storage
-    image: storage:latest
+      context: ./../external-service
+    image: external-service:latest
     ports:
-      - "8091:8080"
-    networks:
-      - camunda-vs-zeebe
-
-  scoring:
-    container_name: scoring
-    build:
-      context: ./../scoring
-    image: scoring:latest
-    ports:
-      - "8092:8080"
+      - "8090:8080"
     networks:
       - camunda-vs-zeebe
     depends_on:
@@ -58,6 +48,7 @@ services:
   camunda-db:
     container_name: camunda-db
     image: postgres:12.7
+    command: postgres -c 'max_connections=500'
     ports:
       - "5432:5432"
     networks:
@@ -67,16 +58,16 @@ services:
       POSTGRES_USER: demo
       POSTGRES_PASSWORD: demo
 
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: 11111
-    ports:
-      - "5050:80"
-    networks:
-      - camunda-vs-zeebe
+#  pgadmin:
+#    container_name: pgadmin
+#    image: dpage/pgadmin4
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: 11111
+#    ports:
+#      - "5050:80"
+#    networks:
+#      - camunda-vs-zeebe
 # TODO: see https://stackoverflow.com/questions/42248198/how-to-mount-a-single-file-in-a-volume
 #    volumes:
 #      - ./pgadmin4/servers.json:/pgadmin4/servers.json:bind
@@ -92,12 +83,11 @@ services:
     networks:
       - camunda-vs-zeebe
     depends_on:
-      - storage
-      - scoring
+      - external-service
       - camunda-db
       - kafka
     environment:
       CAMUNDA_DATASOURCE_JDBC_URL: jdbc:postgresql://camunda-db:5432/demo
-      SERVICES_STORAGE: http://storage:8080/
-      SERVICES_SCORING: http://scoring:8080/
+      SERVICES_STORAGE: http://external-service:8080/
+      SERVICES_SCORING: http://external-service:8080/
       SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092

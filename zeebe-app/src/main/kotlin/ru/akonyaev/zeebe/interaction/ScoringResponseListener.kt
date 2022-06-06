@@ -1,6 +1,6 @@
 package ru.akonyaev.zeebe.interaction
 
-import io.camunda.zeebe.spring.client.ZeebeClientLifecycle
+import io.camunda.zeebe.spring.client.lifecycle.ZeebeClientLifecycle
 import mu.KLogging
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component

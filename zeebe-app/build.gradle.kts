@@ -3,5 +3,5 @@ dependencies {
 
     implementation("org.springframework.kafka:spring-kafka")
 
-    implementation("io.camunda:spring-zeebe-starter:8.0.2")
+    implementation("io.camunda:spring-zeebe-starter:8.0.5")
 }

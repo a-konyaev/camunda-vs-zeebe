@@ -1,3 +1,0 @@
-springdoc:
-  packagesToScan: ru.akonyaev.storage
-  pathsToMatch: /**

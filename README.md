@@ -1,6 +1,6 @@
 # Camunda vs Zeebe
 
-This is a demo project that attempts to compare Camunda Platform and Zeebe 
+This is a demo project that attempts to compare Camunda 7 and 8 (Camunda Platform and Zeebe)
 in terms of functionality as well as performance.
 
 ### Prerequisites

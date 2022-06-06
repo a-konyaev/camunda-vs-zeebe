@@ -23,8 +23,8 @@ springdoc:
   pathsToMatch: /process/**
 
 services:
-  storage: http://localhost:8091/
-  scoring: http://localhost:8092/
+  storage: http://localhost:8090/
+  scoring: http://localhost:8090/
 
 camunda:
   datasource:

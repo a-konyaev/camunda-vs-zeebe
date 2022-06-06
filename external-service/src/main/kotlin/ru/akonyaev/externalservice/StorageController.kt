@@ -1,4 +1,4 @@
-package ru.akonyaev.storage
+package ru.akonyaev.externalservice
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RestController
 import ru.akonyaev.common.model.ApplicationData
 import java.util.UUID
 
-@Tag(name = "Application storage")
 @RestController
-class Controller {
+class StorageController {
 
     @Operation(summary = "Get application data")
     @GetMapping("/{applicationId}", produces = [MediaType.APPLICATION_JSON_VALUE])

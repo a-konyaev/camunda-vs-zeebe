@@ -49,7 +49,7 @@ services:
 
   zeebe:
     container_name: zeebe
-    image: camunda/zeebe:8.0.0
+    image: camunda/zeebe:8.0.2
     ports:
       - "26500:26500"
       - "9600:9600"
@@ -57,12 +57,12 @@ services:
     networks:
       - camunda-vs-zeebe
     environment:
-      - "JAVA_OPTS=-Xmx8g"
+      - "JAVA_OPTS=-Xmx7g"
     volumes:
       - ./zeebe/zeebe-hazelcast-exporter-1.0.1-with-dependencies.jar:/usr/local/zeebe/exporters/zeebe-hazelcast-exporter.jar
       - ./zeebe/application.yaml:/usr/local/zeebe/config/application.yaml
-    depends_on:
-      - elasticsearch
+    # depends_on:
+    #   - elasticsearch
 
 #  operate:
 #    container_name: operate
@@ -108,23 +108,13 @@ services:
 #      - zeebe
 #      - elasticsearch
 
-  storage:
-    container_name: storage
+  external-service:
+    container_name: external-service
     build:
-      context: ./../storage
-    image: storage:latest
+      context: ./../external-service
+    image: external-service:latest
     ports:
-      - "8091:8080"
-    networks:
-      - camunda-vs-zeebe
-
-  scoring:
-    container_name: scoring
-    build:
-      context: ./../scoring
-    image: scoring:latest
-    ports:
-      - "8092:8080"
+      - "8090:8080"
     networks:
       - camunda-vs-zeebe
     depends_on:
@@ -142,11 +132,11 @@ services:
     networks:
       - camunda-vs-zeebe
     depends_on:
-      - storage
-      - scoring
+      - external-service
       - kafka
+      - zeebe
     environment:
-      - services.storage=http://storage:8080/
-      - services.scoring=http://scoring:8080/
+      - services.storage=http://external-service:8080/
+      - services.scoring=http://external-service:8080/
       - spring.kafka.bootstrapservers=kafka:9092
       - zeebe.client.broker.gateway-address=zeebe:26500

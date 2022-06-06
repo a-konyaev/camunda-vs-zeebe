@@ -1,11 +1,11 @@
-package ru.akonyaev.storage
+package ru.akonyaev.externalservice
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class StorageApplication
+class ExternalServiceApplication
 
 fun main(args: Array<String>) {
-    runApplication<StorageApplication>(*args)
+    runApplication<ExternalServiceApplication>(*args)
 }

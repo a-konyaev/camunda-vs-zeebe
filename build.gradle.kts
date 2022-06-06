@@ -4,7 +4,7 @@ plugins {
     val kotlinVersion = "1.6.10"
 
     id("io.spring.dependency-management") version "1.0.11.RELEASE" apply false
-    id("org.springframework.boot") version "2.6.3" apply false
+    id("org.springframework.boot") version "2.7.0" apply false
 
     // TODO if add 'apply false' then build will fail...
     id("org.jetbrains.kotlin.jvm") version kotlinVersion
@@ -12,7 +12,7 @@ plugins {
 }
 
 allprojects {
-    group = "ru.akonyaev.zeebe.demo"
+    group = "ru.akonyaev"
 
     repositories {
         maven("https://repo1.maven.org/maven2/")

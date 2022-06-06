@@ -1,4 +1,1 @@
-#FILE=docker-compose.camunda.yml
-FILE=docker-compose.zeebe.yml
-
-docker-compose -f $FILE up -d
+docker-compose -f $DOCKER_FILE up -d

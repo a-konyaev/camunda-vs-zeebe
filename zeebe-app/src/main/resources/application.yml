@@ -39,6 +39,8 @@ zeebe:
     worker:
       max-jobs-active: 256  # 32 by default
       threads: 16 # 1 by default
+
     job:
-      poll-interval: 100 # 100 msec by default
+      poll-interval: 50 # 100 msec by default
+    request-timeout: PT60S # 10 sec by default
 

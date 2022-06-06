@@ -1,6 +1,6 @@
 package ru.akonyaev.zeebe.controller
 
-import io.camunda.zeebe.spring.client.ZeebeClientLifecycle
+import io.camunda.zeebe.spring.client.lifecycle.ZeebeClientLifecycle
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses

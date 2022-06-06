@@ -77,7 +77,7 @@ zeebe:
       # system (it has to run somewhere). For example, when running Zeebe on a machine
       # which has 4 cores, a good value would be 2.
       # This setting can also be overridden using the environment variable ZEEBE_BROKER_THREADS_CPUTHREADCOUNT
-      cpuThreadCount: 10
+      cpuThreadCount: 8
       # Controls the number of io threads to be used.
       # This setting can also be overridden using the environment variable ZEEBE_BROKER_THREADS_IOTHREADCOUNT
       ioThreadCount: 2
@@ -91,44 +91,44 @@ zeebe:
     #
     # These setting can also be overridden using the environment variables "ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_..."
     #
-    exporters:
-      elasticsearch:
-        className: io.camunda.zeebe.exporter.ElasticsearchExporter
+    #exporters:
+    #  elasticsearch:
+    #    className: io.camunda.zeebe.exporter.ElasticsearchExporter
 
-        args:
-          url: http://elasticsearch:9200
+    #    args:
+    #      url: http://elasticsearch:9200
 
-          bulk:
-            delay: 5
-            size: 1000
+    #      bulk:
+    #        delay: 5
+    #        size: 1000
 
-          # authentication:
-          #   username: elastic
-          #   password: changeme
+    #      # authentication:
+    #      #   username: elastic
+    #      #   password: changeme
 
-          index:
-            prefix: zeebe-record
-            createTemplate: true
+    #      index:
+    #        prefix: zeebe-record
+    #        createTemplate: true
 
-            command: false
-            event: true
-            rejection: false
+    #        command: false
+    #        event: true
+    #        rejection: false
 
-            deployment: true
-            error: true
-            incident: true
-            job: true
-            jobBatch: false
-            message: false
-            messageSubscription: false
-            variable: true
-            variableDocument: true
-            workflowInstance: true
-            workflowInstanceCreation: false
-            workflowInstanceSubscription: false
+    #        deployment: true
+    #        error: true
+    #        incident: true
+    #        job: true
+    #        jobBatch: false
+    #        message: false
+    #        messageSubscription: false
+    #        variable: true
+    #        variableDocument: true
+    #        workflowInstance: true
+    #        workflowInstanceCreation: false
+    #        workflowInstanceSubscription: false
 
-            ignoreVariablesAbove: 32677
+    #        ignoreVariablesAbove: 32677
 
-      hazelcast:
-        className: io.zeebe.hazelcast.exporter.HazelcastExporter
-        jarPath: exporters/zeebe-hazelcast-exporter.jar
+    #  hazelcast:
+    #    className: io.zeebe.hazelcast.exporter.HazelcastExporter
+    #    jarPath: exporters/zeebe-hazelcast-exporter.jar

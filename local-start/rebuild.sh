@@ -1,4 +1,1 @@
-#FILE=docker-compose.camunda.yml
-FILE=docker-compose.zeebe.yml
-
-cd ../ && ./gradlew clean build && cd local-start && docker-compose -f $FILE build
+cd ../ && ./gradlew clean build && cd local-start && docker-compose -f $DOCKER_FILE build

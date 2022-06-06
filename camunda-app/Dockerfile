@@ -5,9 +5,6 @@ ARG APP="camunda-app"
 WORKDIR /opt/app
 COPY ./build/libs/$APP.jar .
 
-RUN adduser -D -u 4343 bpm
-USER 4343
-
 ENV MALLOC_ARENA_MAX="4" \
     APP="$APP" \
     MAIN_CLASS="$MAIN_CLASS" \
