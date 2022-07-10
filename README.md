@@ -18,7 +18,7 @@ java -jar camunda-app/build/libs/camunda-app.jar
 - go to dir ./local-start
 - setup needed environment
     ```bash
-    source set_camunda.sh
+    source set_<camunda|zeebe|zeebe_cluster>.sh
     ```
     You can also choose one of set_*.sh files.
 - start docker containers:
