@@ -34,10 +34,10 @@
       <bpmn:messageEventDefinition id="MessageEventDefinition_0coqbkp" messageRef="Message_2sqf2o1" />
     </bpmn:intermediateCatchEvent>
     <bpmn:subProcess id="Activity_121vhra" triggeredByEvent="true">
-      <bpmn:startEvent id="Event_1aok7ak" name="600 sec" isInterrupting="false">
+      <bpmn:startEvent id="Event_1aok7ak" name="30 sec" isInterrupting="false">
         <bpmn:outgoing>Flow_0093sl7</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0w9csal">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT600S</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT30S</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:startEvent>
       <bpmn:serviceTask id="LogScoringTimeoutTask" name="Log scoring timeout">
@@ -82,29 +82,21 @@
         <dc:Bounds x="140" y="190" width="600" height="370" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_03pg3j5_di" bpmnElement="TextAnnotation_03pg3j5">
-        <dc:Bounds x="190" y="218" width="129" height="64" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0pvstec_di" bpmnElement="TextAnnotation_0pvstec">
-        <dc:Bounds x="580" y="218" width="130" height="40" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_01lej36_di" bpmnElement="Flow_01lej36">
-        <di:waypoint x="238" y="360" />
-        <di:waypoint x="290" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1nt7zua_di" bpmnElement="Flow_1nt7zua">
-        <di:waypoint x="390" y="360" />
-        <di:waypoint x="432" y="360" />
+      <bpmndi:BPMNEdge id="Flow_0o0fuxr_di" bpmnElement="Flow_0o0fuxr">
+        <di:waypoint x="620" y="360" />
+        <di:waypoint x="672" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1su69bt_di" bpmnElement="Flow_1su69bt">
         <di:waypoint x="468" y="360" />
         <di:waypoint x="520" y="360" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0o0fuxr_di" bpmnElement="Flow_0o0fuxr">
-        <di:waypoint x="620" y="360" />
-        <di:waypoint x="672" y="360" />
+      <bpmndi:BPMNEdge id="Flow_1nt7zua_di" bpmnElement="Flow_1nt7zua">
+        <di:waypoint x="390" y="360" />
+        <di:waypoint x="432" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01lej36_di" bpmnElement="Flow_01lej36">
+        <di:waypoint x="238" y="360" />
+        <di:waypoint x="290" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent">
         <dc:Bounds x="202" y="342" width="36" height="36" />
@@ -136,7 +128,7 @@
       <bpmndi:BPMNShape id="Event_0q2bftj_di" bpmnElement="Event_1aok7ak">
         <dc:Bounds x="222" y="462" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="221" y="505" width="39" height="14" />
+          <dc:Bounds x="224" y="505" width="33" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1pe884t_di" bpmnElement="LogScoringTimeoutTask">
@@ -148,6 +140,14 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="402" y="505" width="77" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_03pg3j5_di" bpmnElement="TextAnnotation_03pg3j5">
+        <dc:Bounds x="190" y="218" width="129" height="64" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0pvstec_di" bpmnElement="TextAnnotation_0pvstec">
+        <dc:Bounds x="580" y="218" width="130" height="40" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_00yrvmq_di" bpmnElement="Association_00yrvmq">
         <di:waypoint x="223" y="342" />

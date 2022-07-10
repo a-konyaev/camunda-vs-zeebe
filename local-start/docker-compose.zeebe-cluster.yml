@@ -6,7 +6,7 @@ networks:
 services:
   zookeeper:
     container_name: zookeeper
-    image: wurstmeister/zookeeper:3.4.6
+    image: wurstmeister/zookeeper:${ZOOKEEPER_VERSION}
     ports:
       - "2181:2181"
     networks:
@@ -14,7 +14,7 @@ services:
 
   kafka:
     container_name: kafka
-    image: wurstmeister/kafka:2.13-2.8.1
+    image: wurstmeister/kafka:${KAFKA_VERSION}
     ports:
       - "9093:9093"
     networks:
@@ -34,107 +34,101 @@ services:
   #---------------------------------------------------------------------------------------------------------------------
   zeebe:
     container_name: zeebe
-    image: camunda/zeebe:8.0.0
+    image: camunda/zeebe:${ZEEBE_VERSION}
     ports:
       - "26500:26500"
     networks:
       - camunda-vs-zeebe
     environment:
-      - zeebe.broker.gateway.enable=true
-      - zeebe.broker.gateway.security.enable=false
-      - zeebe.broker.cluster.nodeId=0
-      - zeebe.broker.cluster.partitionsCount=12
-      - zeebe.broker.cluster.clusterSize=3
-      - zeebe.broker.cluster.initialContactPoints=[zeebe:26502,zeebe-node1:26502,zeebe-node2:26502]
-      - zeebe.broker.backpressure.enabled=false
+#      - ZEEBE_LOG_LEVEL=DEBUG
+      - ZEEBE_BROKER_CLUSTER_NODEID=0
+      - ZEEBE_BROKER_CLUSTER_PARTITIONSCOUNT=24
+      - ZEEBE_BROKER_CLUSTER_CLUSTERSIZE=4
+      - ZEEBE_BROKER_CLUSTER_REPLICATIONFACTOR=1
+      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe2:26502,zeebe3:26502,zeebe4:26502
+      - ZEEBE_BROKER_GATEWAY_ENABLE=true
     volumes:
-      - ./zeebe/zeebe-hazelcast-exporter-1.0.1-with-dependencies.jar:/usr/local/zeebe/exporters/zeebe-hazelcast-exporter.jar
-      - ./zeebe/application.yaml:/usr/local/zeebe/config/application.yaml
-    depends_on:
-      - elasticsearch
+      - ./zeebe-cluster/application.yaml:/usr/local/zeebe/config/application.yaml
 
-  zeebe-node1:
-    container_name: zeebe-node1
-    image: camunda/zeebe:8.0.0
+  zeebe2:
+    container_name: zeebe2
+    image: camunda/zeebe:${ZEEBE_VERSION}
     networks:
       - camunda-vs-zeebe
     environment:
-      - zeebe.broker.cluster.nodeId=1
-      - zeebe.broker.cluster.partitionsCount=12
-      - zeebe.broker.cluster.clusterSize=3
-      - zeebe.broker.cluster.initialContactPoints=[zeebe:26502,zeebe-node1:26502,zeebe-node2:26502]
-      - zeebe.broker.backpressure.enabled=false
+      - ZEEBE_BROKER_CLUSTER_NODEID=1
+      - ZEEBE_BROKER_CLUSTER_PARTITIONSCOUNT=24
+      - ZEEBE_BROKER_CLUSTER_CLUSTERSIZE=4
+      - ZEEBE_BROKER_CLUSTER_REPLICATIONFACTOR=1
+      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe:26502,zeebe3:26502,zeebe4:26502
     volumes:
-      - ./zeebe/zeebe-hazelcast-exporter-1.0.1-with-dependencies.jar:/usr/local/zeebe/exporters/zeebe-hazelcast-exporter.jar
-      - ./zeebe/application.yaml:/usr/local/zeebe/config/application.yaml
-    depends_on:
-      - zeebe
-      - elasticsearch
+      - ./zeebe-cluster/application.yaml:/usr/local/zeebe/config/application.yaml
 
-  zeebe-node2:
-    container_name: zeebe-node2
-    image: camunda/zeebe:8.0.0
+  zeebe3:
+    container_name: zeebe3
+    image: camunda/zeebe:${ZEEBE_VERSION}
     networks:
       - camunda-vs-zeebe
     environment:
-      - zeebe.broker.cluster.nodeId=2
-      - zeebe.broker.cluster.partitionsCount=12
-      - zeebe.broker.cluster.clusterSize=3
-      - zeebe.broker.cluster.initialContactPoints=[zeebe:26502,zeebe-node1:26502,zeebe-node2:26502]
-      - zeebe.broker.backpressure.enabled=false
+      - ZEEBE_BROKER_CLUSTER_NODEID=2
+      - ZEEBE_BROKER_CLUSTER_PARTITIONSCOUNT=24
+      - ZEEBE_BROKER_CLUSTER_CLUSTERSIZE=4
+      - ZEEBE_BROKER_CLUSTER_REPLICATIONFACTOR=1
+      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe:26502,zeebe2:26502,zeebe4:26502
     volumes:
-      - ./zeebe/zeebe-hazelcast-exporter-1.0.1-with-dependencies.jar:/usr/local/zeebe/exporters/zeebe-hazelcast-exporter.jar
-      - ./zeebe/application.yaml:/usr/local/zeebe/config/application.yaml
-    depends_on:
-      - zeebe-node1
-      - elasticsearch
+      - ./zeebe-cluster/application.yaml:/usr/local/zeebe/config/application.yaml
+
+  zeebe4:
+    container_name: zeebe4
+    image: camunda/zeebe:${ZEEBE_VERSION}
+    networks:
+      - camunda-vs-zeebe
+    environment:
+      - ZEEBE_BROKER_CLUSTER_NODEID=3
+      - ZEEBE_BROKER_CLUSTER_PARTITIONSCOUNT=24
+      - ZEEBE_BROKER_CLUSTER_CLUSTERSIZE=4
+      - ZEEBE_BROKER_CLUSTER_REPLICATIONFACTOR=1
+      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe:26502,zeebe2:26502,zeebe3:26502
+    volumes:
+      - ./zeebe-cluster/application.yaml:/usr/local/zeebe/config/application.yaml
 
   #---------------------------------------------------------------------------------------------------------------------
+#  elasticsearch:
+#    container_name: elasticsearch
+#    image: elasticsearch:${ELASTICSEARCH_VERSION}
+#    ports:
+#      - "9200:9200"
+#    networks:
+#      - camunda-vs-zeebe
+#    environment:
+#      - discovery.type=single-node
+#      - cluster.name=elasticsearch
+#      - xpack.security.enabled=false
+#      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+  #    volumes:
+  #      - elasticsearch_data:/usr/share/elasticsearch/data
 
-  elasticsearch:
-    container_name: elasticsearch
-    image: elasticsearch:7.16.2
-    ports:
-      - "9200:9200"
-    networks:
-      - camunda-vs-zeebe
-    environment:
-      - discovery.type=single-node
-      - cluster.name=elasticsearch
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-
-  operate:
-    container_name: operate
-    image: camunda/operate:8.0.0
-    ports:
-      - "8083:8080"
-    networks:
-      - camunda-vs-zeebe
-    volumes:
-      - ./operate/application.yml:/usr/local/operate/config/application.yml
-    depends_on:
-      - elasticsearch
+#  operate:
+#    container_name: operate
+#    image: camunda/operate:${ZEEBE_VERSION}
+#    ports:
+#      - "8083:8080"
+#    networks:
+#      - camunda-vs-zeebe
+#    volumes:
+#      - ./operate/application.yml:/usr/local/operate/config/application.yml
+#    depends_on:
+#      - zeebe
+#      - elasticsearch
 
   #---------------------------------------------------------------------------------------------------------------------
-
-  storage:
-    container_name: storage
+  external-service:
+    container_name: external-service
     build:
-      context: ./../storage
-    image: storage:latest
+      context: ./../external-service
+    image: external-service:latest
     ports:
-      - "8091:8080"
-    networks:
-      - camunda-vs-zeebe
-
-  scoring:
-    container_name: scoring
-    build:
-      context: ./../scoring
-    image: scoring:latest
-    ports:
-      - "8092:8080"
+      - "8090:8080"
     networks:
       - camunda-vs-zeebe
     depends_on:
@@ -152,12 +146,11 @@ services:
     networks:
       - camunda-vs-zeebe
     depends_on:
-      - storage
-      - scoring
+      - external-service
       - kafka
       - zeebe
     environment:
-      - services.storage=http://storage:8080/
-      - services.scoring=http://scoring:8080/
+      - services.storage=http://external-service:8080/
+      - services.scoring=http://external-service:8080/
       - spring.kafka.bootstrapservers=kafka:9092
       - zeebe.client.broker.gateway-address=zeebe:26500

@@ -6,7 +6,7 @@ networks:
 services:
   zookeeper:
     container_name: zookeeper
-    image: wurstmeister/zookeeper:3.4.6
+    image: wurstmeister/zookeeper:${ZOOKEEPER_VERSION}
     ports:
       - "2181:2181"
     networks:
@@ -14,7 +14,7 @@ services:
 
   kafka:
     container_name: kafka
-    image: wurstmeister/kafka:2.13-2.8.1
+    image: wurstmeister/kafka:${KAFKA_VERSION}
     ports:
       - "9093:9093"
     networks:
@@ -31,25 +31,10 @@ services:
         company-scoring-response:1:1,
         scoring-response:1:1
 
-#  elasticsearch:
-#    container_name: elasticsearch
-#    image: elasticsearch:7.16.2
-#    #    image: elasticsearch:8.1.2   ! operate not working with this version
-#    ports:
-#      - "9200:9200"
-#    networks:
-#      - camunda-vs-zeebe
-#    environment:
-#      - discovery.type=single-node
-#      - cluster.name=elasticsearch
-#      - xpack.security.enabled=false
-#      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-#  #    volumes:
-#  #      - elasticsearch_data:/usr/share/elasticsearch/data
-
+  #---------------------------------------------------------------------------------------------------------------------
   zeebe:
     container_name: zeebe
-    image: camunda/zeebe:8.0.2
+    image: camunda/zeebe:${ZEEBE_VERSION}
     ports:
       - "26500:26500"
       - "9600:9600"
@@ -64,9 +49,25 @@ services:
     # depends_on:
     #   - elasticsearch
 
+  #---------------------------------------------------------------------------------------------------------------------
+#  elasticsearch:
+#    container_name: elasticsearch
+#    image: elasticsearch:${ELASTICSEARCH_VERSION}
+#    ports:
+#      - "9200:9200"
+#    networks:
+#      - camunda-vs-zeebe
+#    environment:
+#      - discovery.type=single-node
+#      - cluster.name=elasticsearch
+#      - xpack.security.enabled=false
+#      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+#  #    volumes:
+#  #      - elasticsearch_data:/usr/share/elasticsearch/data
+
 #  operate:
 #    container_name: operate
-#    image: camunda/operate:8.0.0
+#    image: camunda/operate:${ZEEBE_VERSION}
 #    ports:
 #      - "8083:8080"
 #    networks:
@@ -94,7 +95,7 @@ services:
 
 #  tasklist:
 #    container_name: tasklist
-#    image: camunda/tasklist:8.0.0
+#    image: camunda/tasklist:${ZEEBE_VERSION}
 #    ports:
 #      - "8084:8080"
 #    networks:
@@ -108,6 +109,7 @@ services:
 #      - zeebe
 #      - elasticsearch
 
+  #---------------------------------------------------------------------------------------------------------------------
   external-service:
     container_name: external-service
     build:

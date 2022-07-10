@@ -7,12 +7,21 @@ in terms of functionality as well as performance.
 
 - Java 17
 
-### Building and running
+### Building and running locally
 ```bash
 ./gradlew clean build
-```
-
-```bash
 java -jar camunda-app/build/libs/camunda-app.jar
 ```
 
+### Running inside docker
+
+- go to dir ./local-start
+- setup needed environment
+    ```bash
+    source set_camunda.sh
+    ```
+    You can also choose one of set_*.sh files.
+- start docker containers:
+    ```bash
+    ./up.sh
+    ```

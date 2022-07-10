@@ -39,7 +39,7 @@
     <bpmn:sequenceFlow id="Flow_14rnwhv" sourceRef="ErrorOrTimeoutGateway" targetRef="IncreaseRetryCounterTask" />
     <bpmn:sequenceFlow id="Flow_1b9uapr" sourceRef="IncreaseRetryCounterTask" targetRef="CheckRetryCounterGateway" />
     <bpmn:sequenceFlow id="Flow_0rq40c0" name="Retries&#10;exceeded" sourceRef="CheckRetryCounterGateway" targetRef="ErrorEndEvent">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= retries &gt;= 3</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= retries &gt;= 5</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1hz1vci" sourceRef="CheckRetryCounterGateway" targetRef="LoopStartGateway" />
     <bpmn:exclusiveGateway id="LoopStartGateway">

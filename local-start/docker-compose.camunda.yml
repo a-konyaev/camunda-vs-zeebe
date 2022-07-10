@@ -6,7 +6,7 @@ networks:
 services:
   zookeeper:
     container_name: zookeeper
-    image: wurstmeister/zookeeper:3.4.6
+    image: wurstmeister/zookeeper:${ZOOKEEPER_VERSION}
     ports:
       - "2181:2181"
     networks:
@@ -14,7 +14,7 @@ services:
 
   kafka:
     container_name: kafka
-    image: wurstmeister/kafka:2.13-2.8.1
+    image: wurstmeister/kafka:${KAFKA_VERSION}
     ports:
       - "9093:9093"
     networks:
@@ -47,7 +47,7 @@ services:
 
   camunda-db:
     container_name: camunda-db
-    image: postgres:12.7
+    image: postgres:${POSTGRES_VERSION}
     command: postgres -c 'max_connections=500'
     ports:
       - "5432:5432"
